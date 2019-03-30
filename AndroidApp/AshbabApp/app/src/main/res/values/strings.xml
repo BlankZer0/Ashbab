@@ -18,4 +18,11 @@
     <!-- Home main content -->
     <string name="title_newly_added">Newly Added</string>
 
+    <!-- Product Details Content -->
+    <string name="taka_sign"> ৳ </string>
+
+    <!-- Default Values -->
+    <string name="default_home_card_name">Sample Chair</string>
+    <string name="default_home_card_price">1250.50</string>
+
 </resources>

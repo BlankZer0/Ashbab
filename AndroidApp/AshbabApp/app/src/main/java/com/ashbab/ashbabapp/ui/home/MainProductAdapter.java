@@ -8,8 +8,10 @@ import android.widget.TextView;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 // you provide access to all the views for a data item in a view holder
 public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.ProductViewHolder>
 {
-    ArrayList<Product> productList;
+    private List<Product> productList;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -63,7 +65,16 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
 
         holder.nameTextView.setText(currentProduct.getProductName());
         holder.priceTextView.setText(String.valueOf(currentProduct.getProductPrice()));
-        holder.productImageView.setImageResource(currentProduct.getImageUrl());
+
+        if (currentProduct.getImageUrl() != null)
+        {
+            ImageView imageView = holder.productImageView;
+            Glide.with(imageView.getContext()).load(currentProduct.getImageUrl()).into(imageView);
+        }
+        else
+        {
+            holder.productImageView.setImageResource(R.mipmap.ic_launcher);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

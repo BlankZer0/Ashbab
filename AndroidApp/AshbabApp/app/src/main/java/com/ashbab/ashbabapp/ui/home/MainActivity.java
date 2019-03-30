@@ -3,78 +3,41 @@ package com.ashbab.ashbabapp.ui.home;
 import android.os.Bundle;
 
 import com.ashbab.ashbabapp.R;
-
 import com.ashbab.ashbabapp.data.model.Product;
+
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridLayout;
+import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     private MainProductAdapter mainProductAdapter;
-    private RecyclerView productList;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ArrayList<Product> products = new ArrayList<>();
-
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-        products.add(new Product("Chair", 10000, R.drawable.family_father));
-        products.add(new Product("Table", 20000, R.drawable.family_mother));
-        products.add(new Product("Bed", 31500, R.drawable.family_son));
-
-        // Recycler View
-        RecyclerView recyclerView = findViewById(R.id.rv_newly_added);
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-
-        // use a Grid layout manager
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
-        mainProductAdapter = new MainProductAdapter(products);
-        recyclerView.setAdapter(mainProductAdapter);
-
-
 
         // set the toolbar as the action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -88,6 +51,78 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        final ArrayList<Product> products = new ArrayList<>();
+
+        // Recycler View
+        recyclerView = findViewById(R.id.rv_newly_added);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+
+        // use a Grid layout manager
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+        mainProductAdapter = new MainProductAdapter(products);
+        recyclerView.setAdapter(mainProductAdapter);
+
+        // Obtain a new or prior instance of HotStockViewModel from the
+        // ViewModelProviders utility class.
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        LiveData<Product> liveData = viewModel.getProductLiveDataMain();
+
+        liveData.observe(this, new Observer<Product>()
+        {
+            @Override
+            public void onChanged(@Nullable Product product)
+            {
+                Log.v(LOG_TAG, "Data change detected");
+
+                if (product != null)
+                {
+                    // update the UI here
+                    //with values in the snapshot
+                    String productName = product.getProductName();
+                    float productPrice = product.getProductPrice();
+                    String imageUrl = product.getImageUrl();
+
+                    products.add(new Product(productName, productPrice, imageUrl));
+                    Log.v(LOG_TAG, productName + " has been added to the list");
+
+                    mainProductAdapter = new MainProductAdapter(products);
+                    recyclerView.setAdapter(mainProductAdapter);
+                }
+            }
+        });
+
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+//        products.add(new Product("Chair", 10000, R.drawable.family_father));
+//        products.add(new Product("Table", 20000, R.drawable.family_mother));
+//        products.add(new Product("Bed", 31500, R.drawable.family_son));
+
     }
 
     @Override

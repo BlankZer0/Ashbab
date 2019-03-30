@@ -16,6 +16,9 @@
     <dimen name="card_main_width">160dp</dimen>
     <dimen name="card_image_height">160dp</dimen>
 
+    <!-- Product Details -->
+    <dimen name="product_image_height">300dp</dimen>
+
     <!-- Font Size -->
     <dimen name="body_font_size">16sp</dimen>
     <dimen name="header_font_size">20sp</dimen>
