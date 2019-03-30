@@ -1,25 +1,8 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-
-    <!-- Activity Margins -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="vertical_spacing">8dp</dimen>
-    <dimen name="horizontal_spacing">4dp</dimen>
-
-    <!-- Navigation Bar Margins -->
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
-
-    <!-- Home card Size -->
-    <dimen name="card_main_height">220dp</dimen>
-    <dimen name="card_main_width">160dp</dimen>
-    <dimen name="card_image_height">160dp</dimen>
-
-    <!-- Product Details -->
-    <dimen name="product_image_height">300dp</dimen>
-
-    <!-- Font Size -->
-    <dimen name="body_font_size">16sp</dimen>
-    <dimen name="header_font_size">20sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
