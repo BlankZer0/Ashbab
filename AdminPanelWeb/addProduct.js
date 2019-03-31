@@ -51,7 +51,7 @@ function submitForm(e){
     var description = getInputval("description");
     var image = imageFileName;
     var model = modelFileName;
-    var price = getInputval("price");
+    var price = parseFloat(getInputval("price"));
 
     uploadFilesToStorage();
     saveProduct(id, name, category, description, image, model, price);
