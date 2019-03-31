@@ -1,16 +1,12 @@
 package com.ashbab.ashbabapp.ui.productPage;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,45 +34,33 @@ public class ProductDetails extends AppCompatActivity
         final TextView productDescription = findViewById(R.id.description_details);
         final Button arButton = findViewById(R.id.ar_button_details);
 
-//        // set the toolbar as the action bar
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
         // Obtain a new or prior instance of HotStockViewModel from the
         // ViewModelProviders utility class.
         ProductDetailsViewModel viewModel = ViewModelProviders.of(this).get(ProductDetailsViewModel.class);
 
         LiveData<Product> liveData = viewModel.getProductDetailsLiveData();
 
-        liveData.observe(this, new Observer<Product>()
+        liveData.observe(this, product ->
         {
-            @Override
-            public void onChanged(@Nullable Product product)
+            Log.v(LOG_TAG, "Data change detected");
+
+            if (product != null)
             {
-                Log.v(LOG_TAG, "Data change detected");
+                // update the UI here
+                Glide.with(productImage.getContext()).load(product.getImageUrl()).into(productImage);
+                productName.setText(product.getProductName());
+                productPrice.setText(String.valueOf(product.getProductPrice()));
+                productCategory.setText(product.getCategory());
+                productDescription.setText(product.getDescription());
 
-                if (product != null)
-                {
-                    // update the UI here
-                    Glide.with(productImage.getContext()).load(product.getImageUrl()).into(productImage);
-                    productName.setText(product.getProductName());
-                    productPrice.setText(String.valueOf(product.getProductPrice()));
-                    productCategory.setText(product.getCategory());
-                    productDescription.setText(product.getDescription());
-
-                    Log.v(LOG_TAG, product.getProductName() + " has been added to loaded successfully");
-                }
+                Log.v(LOG_TAG, product.getProductName() + " has been added to loaded successfully");
             }
         });
 
-        arButton.setOnClickListener(new View.OnClickListener()
+        arButton.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
-            {
-                Intent numbersIntent = new Intent(ProductDetails.this, MainActivity.class);
-                startActivity(numbersIntent);
-            }
+            Intent arCameraIntent = new Intent(ProductDetails.this, ArCameraActivity.class);
+            startActivity(arCameraIntent);
         });
     }
 }

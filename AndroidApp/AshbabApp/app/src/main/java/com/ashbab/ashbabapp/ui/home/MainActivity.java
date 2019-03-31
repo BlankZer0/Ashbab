@@ -9,14 +9,12 @@ import com.ashbab.ashbabapp.data.model.Product;
 import com.ashbab.ashbabapp.ui.productPage.ProductDetails;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,8 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -75,37 +71,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         LiveData<Product> liveData = viewModel.getProductLiveDataMain();
 
-        liveData.observe(this, new Observer<Product>()
+        liveData.observe(this, product ->
         {
-            @Override
-            public void onChanged(@Nullable Product product)
+            Log.v(LOG_TAG, "Data change detected");
+
+            if (product != null)
             {
-                Log.v(LOG_TAG, "Data change detected");
+                // update the UI here
+                String productName = product.getProductName();
+                float productPrice = product.getProductPrice();
+                String imageUrl = product.getImageUrl();
 
-                if (product != null)
-                {
-                    // update the UI here
-                    String productName = product.getProductName();
-                    float productPrice = product.getProductPrice();
-                    String imageUrl = product.getImageUrl();
+                products.add(new Product(productName, productPrice, imageUrl));
+                Log.v(LOG_TAG, productName + " has been added to the list");
 
-                    products.add(new Product(productName, productPrice, imageUrl));
-                    Log.v(LOG_TAG, productName + " has been added to the list");
-
-                    mainProductAdapter = new MainProductAdapter(products);
-                    recyclerView.setAdapter(mainProductAdapter);
-                }
+                mainProductAdapter = new MainProductAdapter(products);
+                recyclerView.setAdapter(mainProductAdapter);
             }
         });
 
-        mainProductAdapter.setOnItemClickListener(new MainProductAdapter.OnItemClickListener()
+        mainProductAdapter.setOnItemClickListener((view, position) ->
         {
-            @Override
-            public void onItemClick(View view, int position)
-            {
-                Intent numbersIntent = new Intent(MainActivity.this, ProductDetails.class);
-                startActivity(numbersIntent);
-            }
+            Intent productDetailsIntent = new Intent(MainActivity.this, ProductDetails.class);
+            startActivity(productDetailsIntent);
         });
     }
 
