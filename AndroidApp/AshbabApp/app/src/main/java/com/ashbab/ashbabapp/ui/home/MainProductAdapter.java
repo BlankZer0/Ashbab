@@ -20,6 +20,22 @@ import androidx.recyclerview.widget.RecyclerView;
 // you provide access to all the views for a data item in a view holder
 public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.ProductViewHolder>
 {
+    /***** Creating OnItemClickListener *****/
+
+    // Define listener member variable
+    private static OnItemClickListener listener;
+    // Define the listener interface
+    public interface OnItemClickListener
+    {
+        void onItemClick(View itemView, int position);
+    }
+
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener)
+    {
+        this.listener = listener;
+    }
+
     private List<Product> productList;
 
     // Provide a reference to the views for each data item
@@ -32,13 +48,25 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
         TextView priceTextView;
         ImageView productImageView;
 
-        ProductViewHolder(View productView)
+        ProductViewHolder(final View productView)
         {
             super(productView);
 
             nameTextView = productView.findViewById(R.id.product_text_view_main);
             priceTextView = productView.findViewById(R.id.price_text_view_main);
             productImageView = productView.findViewById(R.id.product_image_view_main);
+
+            // Setup the click listener
+            productView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null)
+                        listener.onItemClick(productView, getLayoutPosition());
+                }
+            });
         }
     }
 

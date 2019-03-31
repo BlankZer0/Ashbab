@@ -38,9 +38,9 @@ public class ProductDetails extends AppCompatActivity
         final TextView productDescription = findViewById(R.id.description_details);
         final Button arButton = findViewById(R.id.ar_button_details);
 
-        // set the toolbar as the action bar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        // set the toolbar as the action bar
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         // Obtain a new or prior instance of HotStockViewModel from the
         // ViewModelProviders utility class.

@@ -1,10 +1,12 @@
 package com.ashbab.ashbabapp.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
 
+import com.ashbab.ashbabapp.ui.productPage.ProductDetails;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.Nullable;
@@ -22,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -91,6 +95,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mainProductAdapter = new MainProductAdapter(products);
                     recyclerView.setAdapter(mainProductAdapter);
                 }
+            }
+        });
+
+        mainProductAdapter.setOnItemClickListener(new MainProductAdapter.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(View view, int position)
+            {
+                Intent numbersIntent = new Intent(MainActivity.this, ProductDetails.class);
+                startActivity(numbersIntent);
             }
         });
     }
