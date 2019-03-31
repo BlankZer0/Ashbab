@@ -18,6 +18,8 @@ var imageStorageRef;
 var modelStorageRef;
 var imageFileName;
 var modelFileName;
+var imageUrl;
+var modelUrl;
 var imageUploader = document.getElementById('imageUploader');
 var modelUploader = document.getElementById('modelUploader');
 var imageFileButton = document.getElementById('imageFile');
@@ -38,6 +40,7 @@ modelFileButton.addEventListener('change', function(e){
 
 //Reference to database
 var productsRef = firebase.database().ref('Products');
+var storage = firebase.storage().ref();
 
 //Main
 document.getElementById('contactForm').addEventListener('submit', submitForm);
@@ -49,8 +52,8 @@ function submitForm(e){
     var name = getInputval("name");
     var category = getInputval("category");
     var description = getInputval("description");
-    var image = imageFileName;
-    var model = modelFileName;
+    var image = imageUrl;
+    var model = modelUrl;
     var price = getInputval("price");
 
     uploadFilesToStorage();
@@ -85,7 +88,11 @@ function uploadFilesToStorage(){
             console.log("Error uploading the Product Image");
         },
         function complete() {
-
+            storage.child('Product-2D-Images/' + imageFileName).getDownloadURL().then(function(url) {
+                imageUrl = url;
+              }).catch(function(error) {
+                // Handle any errors
+              });
         });
 
     var modelUploadTask = modelStorageRef.put(selectedModelFile);
@@ -98,7 +105,10 @@ function uploadFilesToStorage(){
             console.log("Error uploading the Product Model");
         },
         function complete() {
-
+            storage.child('Product-3D-Models/' + modelFileName).getDownloadURL().then(function(url) {
+                modelUrl = url;
+              }).catch(function(error) {
+                // Handle any errors
+              });
         });
 }
-
