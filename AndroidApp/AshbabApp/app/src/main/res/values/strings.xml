@@ -2,8 +2,31 @@
     <string name="app_name">Ashbab</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Navigation Header -->
+    <string name="nav_header_title">User</string>
+    <string name="nav_header_subtitle">ashbab.bd@gmail.com</string>
+
+    <!-- Drawer Items -->
+    <string name="category_home">Home</string>
+    <string name="category_title">Categories</string>
+    <string name="category_chair">Chair</string>
+    <string name="category_table">Table</string>
+
+    <!-- Home main content -->
+    <string name="title_newly_added">Newly Added</string>
+
+    <!-- Product Details Content -->
+    <string name="taka_sign"> ৳ </string>
+    <string name="title_description">Product Description</string>
+    <string name="title_category">Category: </string>
+
+    <!-- Default Values -->
+    <string name="default_home_card_name">Sample Chair</string>
+    <string name="default_home_card_price">1250.50</string>
+    <string name="default_category_tag">Chair</string>
+    <string name="default_description">Comfy and lightweight so it’s easy to move. The castors have a handy brake mechanism that keeps the chair in place when you stand up, and releases when you sit down. Adjust the height and angle of this chair so your work day feels comfortable. The mesh backrest lets air through so you keep cool even when the workload rises. Built to outlast years of ups and downs.</string>
+
 </resources>
