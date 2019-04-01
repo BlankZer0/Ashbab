@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
-import com.ashbab.ashbabapp.ui.home.MainActivity;
 import com.bumptech.glide.Glide;
 
+/**
+ * Creates the activity to show the specific products of a product.
+ */
 public class ProductDetails extends AppCompatActivity
 {
     private static final String LOG_TAG = ProductDetails.class.getSimpleName();
@@ -34,12 +36,10 @@ public class ProductDetails extends AppCompatActivity
         final TextView productDescription = findViewById(R.id.description_details);
         final Button arButton = findViewById(R.id.ar_button_details);
 
-        // Obtain a new or prior instance of HotStockViewModel from the
-        // ViewModelProviders utility class.
+        // Selects the viewModel to fetch the data needed for the activity
+        // The data feed to the activity are Live Data that automatically updates the UI on data change
         ProductDetailsViewModel viewModel = ViewModelProviders.of(this).get(ProductDetailsViewModel.class);
-
         LiveData<Product> liveData = viewModel.getProductDetailsLiveData();
-
         liveData.observe(this, product ->
         {
             Log.v(LOG_TAG, "Data change detected");
@@ -57,6 +57,7 @@ public class ProductDetails extends AppCompatActivity
             }
         });
 
+        // Open the camera to show the AR model when the AR button has been clicked
         arButton.setOnClickListener(v ->
         {
             Intent arCameraIntent = new Intent(ProductDetails.this, ArCameraActivity.class);

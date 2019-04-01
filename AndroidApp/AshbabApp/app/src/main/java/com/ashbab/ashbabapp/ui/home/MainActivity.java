@@ -9,6 +9,7 @@ import com.ashbab.ashbabapp.data.model.Product;
 import com.ashbab.ashbabapp.ui.productPage.ProductDetails;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -25,8 +26,13 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+/**
+ * This is the Activity for the App home
+ * The user is directed to this menu at app launch after the user logs in successfully.
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
+    // Tag to be used for debugging
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private MainProductAdapter mainProductAdapter;
@@ -38,28 +44,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // set the toolbar as the action bar
+        // set the modified toolbar as the action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Drawer and Navigation bar
+        // Creates a drawer (Hamburger menu) and and set toggle options
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        // Attaches an Item Selected listener with app drawer's navigation items
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Create a list to hold all the products to be shown in the recycler view
         final ArrayList<Product> products = new ArrayList<>();
 
-        // Recycler View
         recyclerView = findViewById(R.id.rv_newly_added);
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
+        // improves performance because changes  that changes in content
+        // do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
 
-        // use a Grid layout manager
+        // The items of the recycler view will be shown in grids
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -67,17 +75,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mainProductAdapter = new MainProductAdapter(products);
         recyclerView.setAdapter(mainProductAdapter);
 
+        // Selects the viewModel to fetch the data needed for the activity
+        // The data feed to the activity are Live Data that automatically updates the UI on data change
         MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-
         LiveData<Product> liveData = viewModel.getProductLiveDataMain();
-
         liveData.observe(this, product ->
         {
             Log.v(LOG_TAG, "Data change detected");
 
             if (product != null)
             {
-                // update the UI here
+                // updates the UI here
                 String productName = product.getProductName();
                 float productPrice = product.getProductPrice();
                 String imageUrl = product.getImageUrl();
@@ -90,17 +98,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        // Attaches an item listener to the recycler view items
         mainProductAdapter.setOnItemClickListener((view, position) ->
         {
+            products.get(position);
             Intent productDetailsIntent = new Intent(MainActivity.this, ProductDetails.class);
+            Intent newIntent = new Intent();
             startActivity(productDetailsIntent);
         });
     }
 
+    /**
+     * Closes the app drawer when the back button is pressed
+     * If it's already opened the back button will work as it normally would have
+     */
     @Override
     public void onBackPressed()
     {
-        // Handle what happens when the back button is pressed
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
@@ -112,20 +127,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Inflates the main menu to add items to the action bar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -137,11 +156,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handle item clicks of the navigation menu
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
+    public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home)

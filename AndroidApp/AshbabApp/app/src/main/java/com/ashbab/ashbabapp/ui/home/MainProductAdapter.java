@@ -13,15 +13,14 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-// Provide a reference to the views for each data item
-// Complex data items may need more than one view per item, and
-// you provide access to all the views for a data item in a view holder
+/**
+ * The adapter to populate the recycler view on the Main activity
+ */
 public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.ProductViewHolder>
 {
-    /***** Creating OnItemClickListener *****/
-
     // Define listener member variable
     private static OnItemClickListener listener;
     // Define the listener interface
@@ -31,9 +30,9 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
     }
 
     // Define the method that allows the parent activity or fragment to define the listener
-    public void setOnItemClickListener(OnItemClickListener listener)
+    void setOnItemClickListener(OnItemClickListener listener)
     {
-        this.listener = listener;
+        MainProductAdapter.listener = listener;
     }
 
     private List<Product> productList;
@@ -56,29 +55,25 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
             priceTextView = productView.findViewById(R.id.price_text_view_main);
             productImageView = productView.findViewById(R.id.product_image_view_main);
 
-            // Setup the click listener
-            productView.setOnClickListener(new View.OnClickListener()
+            // Setup the click listener that will listen for item clicks
+            productView.setOnClickListener(v ->
             {
-                @Override
-                public void onClick(View v)
-                {
-                    // Triggers click upwards to the adapter on click
-                    if (listener != null)
-                        listener.onItemClick(productView, getLayoutPosition());
-                }
+                // Triggers click upwards to the adapter on click
+                if (listener != null)
+                    listener.onItemClick(productView, getLayoutPosition());
             });
         }
     }
 
-    // Constructor
     MainProductAdapter(ArrayList<Product> productList)
     {
         this.productList = productList;
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
-    public MainProductAdapter.ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public MainProductAdapter.ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         int layoutForListItem = R.layout.product_list_main;
         View view = LayoutInflater.from(parent.getContext()).inflate(layoutForListItem, parent, false);
@@ -87,7 +82,7 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ProductViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position)
     {
         Product currentProduct = productList.get(position);
 
@@ -105,7 +100,7 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of the dataset (invoked by the layout manager)
     @Override
     public int getItemCount()
     {

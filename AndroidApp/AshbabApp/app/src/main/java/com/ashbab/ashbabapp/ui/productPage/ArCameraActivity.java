@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,6 +21,9 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+/**
+ * This class is responsible for handling the Camera view that shows the Augmented Reality Model
+ */
 public class ArCameraActivity extends AppCompatActivity
 {
     private static final String TAG = ArCameraActivity.class.getSimpleName();
@@ -31,7 +33,7 @@ public class ArCameraActivity extends AppCompatActivity
     private ModelRenderable modelRenderable;
 
     @Override
-    @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
+    @SuppressWarnings("FutureReturnValueIgnored")
     // CompletableFuture requires api level 24
     // FutureReturnValueIgnored is not valid
     protected void onCreate(Bundle savedInstanceState)
@@ -46,8 +48,8 @@ public class ArCameraActivity extends AppCompatActivity
         setContentView(R.layout.activity_ar_camera);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
-        // When you build a Renderable, Sceneform loads its resources in the background while returning
-        // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
+        // When you build a Renderable, Sceneform loads its resources in the background
+        // while returning a CompletableFuture.
         ModelRenderable.builder()
                 .setSource(this, Uri.parse("Chair.sfb"))
                 .build()
@@ -61,6 +63,7 @@ public class ArCameraActivity extends AppCompatActivity
                             return null;
                         });
 
+        // Anchors the 3D object on the detected plain
         arFragment.setOnTapArPlaneListener(
                 (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
                     if (modelRenderable == null) {
@@ -72,29 +75,32 @@ public class ArCameraActivity extends AppCompatActivity
                     AnchorNode anchorNode = new AnchorNode(anchor);
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
 
-                    // Create the transformable andy and add it to the anchor.
-                    TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
-                    andy.setParent(anchorNode);
-                    andy.setRenderable(modelRenderable);
-                    andy.select();
+                    // Create the transformable model and add it to the anchor.
+                    TransformableNode transformableNode = new TransformableNode(arFragment.getTransformationSystem());
+                    transformableNode.setParent(anchorNode);
+                    transformableNode.setRenderable(modelRenderable);
+                    transformableNode.select();
                 });
     }
 
     /**
-     * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
-     * on this device.
-     *
      * <p>Sceneform requires Android N on the device as well as OpenGL 3.0 capabilities.
-     *
      * <p>Finishes the activity if Sceneform can not run
      */
-    public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            Log.e(TAG, "Sceneform requires Android N or later");
-            Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
-            activity.finish();
-            return false;
-        }
+    public static boolean checkIsSupportedDeviceOrFinish(final Activity activity)
+    {
+        // This checks for the android version of the device the app is running on
+        // Uncomment this if the minimum required android version is lower than Android 7.0
+        // as augmented reality features does not support on those devices
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+//        {
+//            Log.e(TAG, "Sceneform requires Android N or later");
+//            Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
+//            activity.finish();
+//            return false;
+//        }
+
+        // Checks the openGL version
         String openGlVersionString =
                 ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
                         .getDeviceConfigurationInfo()

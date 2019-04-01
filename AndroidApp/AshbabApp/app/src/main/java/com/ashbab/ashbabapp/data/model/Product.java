@@ -1,5 +1,8 @@
 package com.ashbab.ashbabapp.data.model;
 
+/**
+ * The Java Bean class of a product
+ */
 public class Product
 {
     private String productID;
@@ -24,6 +27,9 @@ public class Product
         this.imageUrl = imageUrl;
     }
 
+    /**
+     * This constructor is used to get the data for the Product Details Activity
+     */
     public Product(String productID, String productName, float productPrice, String imageUrl, String model3dUrl, String category, String description)
     {
         this.productID = productID;
@@ -40,19 +46,9 @@ public class Product
         return productID;
     }
 
-    public void setProductID(String productID)
-    {
-        this.productID = productID;
-    }
-
     public String getProductName()
     {
         return productName;
-    }
-
-    public void setProductName(String productName)
-    {
-        this.productName = productName;
     }
 
     public float getProductPrice()
@@ -60,19 +56,9 @@ public class Product
         return productPrice;
     }
 
-    public void setProductPrice(float productPrice)
-    {
-        this.productPrice = productPrice;
-    }
-
     public String getImageUrl()
     {
         return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl)
-    {
-        this.imageUrl = imageUrl;
     }
 
     public String getModel3dUrl()
@@ -80,28 +66,13 @@ public class Product
         return model3dUrl;
     }
 
-    public void setModel3dUrl(String model3dUrl)
-    {
-        this.model3dUrl = model3dUrl;
-    }
-
     public String getCategory()
     {
         return category;
     }
 
-    public void setCategory(String category)
-    {
-        this.category = category;
-    }
-
     public String getDescription()
     {
         return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
     }
 }

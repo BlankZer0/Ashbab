@@ -13,6 +13,9 @@ import com.google.firebase.database.annotations.Nullable;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+/**
+ * This class turns the dataSnapshot from the Firebase into LiveData that can be observed for any kind of changes
+ */
 public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
 {
     private static final String LOG_TAG = "FirebaseQueryLiveData";
@@ -21,11 +24,6 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
     private final ChildEventListener myChildEventListener = new MyChildEventListener();
     private boolean listenerRemovePending = false;
     private final Handler handler = new Handler();
-
-    public FirebaseQueryLiveData(Query query)
-    {
-        this.query = query;
-    }
 
     public FirebaseQueryLiveData(DatabaseReference ref)
     {
@@ -47,6 +45,7 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
     {
         Log.d(LOG_TAG, "onActive");
 
+        // Removes the listener only if it's pending for removal
         if (listenerRemovePending)
         {
             handler.removeCallbacks(removeListener);
@@ -67,6 +66,9 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
         listenerRemovePending = true;
     }
 
+    /**
+     * A child event listener to observe any changes in the child nodes of the query
+     */
     private class MyChildEventListener implements ChildEventListener
     {
         @Override
