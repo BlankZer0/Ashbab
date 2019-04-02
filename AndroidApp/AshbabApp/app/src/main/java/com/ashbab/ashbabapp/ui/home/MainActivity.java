@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         // Create a list to hold all the products to be shown in the recycler view
-        final ArrayList<Product> products = new ArrayList<>();
+        ArrayList<Product> products = new ArrayList<>();
 
         recyclerView = findViewById(R.id.rv_newly_added);
         // improves performance because changes  that changes in content
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        // specify an adapter (see also next example)
+        // specify the adapter to populate the recyclerView
         mainProductAdapter = new MainProductAdapter(products);
         recyclerView.setAdapter(mainProductAdapter);
 
@@ -79,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // The data feed to the activity are Live Data that automatically updates the UI on data change
         MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         LiveData<Product> liveData = viewModel.getProductLiveDataMain();
-        liveData.observe(this, product ->
+        // Listen data change forever
+        liveData.observeForever(product ->
         {
             Log.v(LOG_TAG, "Data change detected");
 
@@ -93,17 +94,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 products.add(new Product(productName, productPrice, imageUrl));
                 Log.v(LOG_TAG, productName + " has been added to the list");
 
-                mainProductAdapter = new MainProductAdapter(products);
-                recyclerView.setAdapter(mainProductAdapter);
+                mainProductAdapter.notifyDataSetChanged();
+//                mainProductAdapter = new MainProductAdapter(products);
+//                recyclerView.setAdapter(mainProductAdapter);
             }
         });
 
         // Attaches an item listener to the recycler view items
         mainProductAdapter.setOnItemClickListener((view, position) ->
         {
-            products.get(position);
+            // Stop listening to data change before switching to another activity
+            liveData.removeObservers(this);
             Intent productDetailsIntent = new Intent(MainActivity.this, ProductDetails.class);
-            Intent newIntent = new Intent();
             startActivity(productDetailsIntent);
         });
     }
@@ -115,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed()
     {
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
