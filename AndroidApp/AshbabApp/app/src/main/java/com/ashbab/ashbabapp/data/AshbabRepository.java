@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ashbab.ashbabapp.data.database.FirebaseQueryLiveData;
 import com.ashbab.ashbabapp.data.model.Product;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,11 +32,11 @@ public class AshbabRepository
     private final MediatorLiveData<Product> productLiveDataMain = new MediatorLiveData<>();
 
     /**
-     * Set up the MediatorLiveData to convert DataSnapshot objects into Product objects
+     * Set up the MediatorLiveData to convert DataSnapshot objects into Product liveData
      */
     private void InitializeData()
     {
-        productLiveDataMain.addSource(liveData, dataSnapshot ->
+        productLiveDataMain.addSource(liveData, (DataSnapshot dataSnapshot) ->
         {
             if (dataSnapshot != null)
             {
@@ -45,9 +46,9 @@ public class AshbabRepository
 
                 executorService.execute(() ->
                 {
-                    productLiveDataMain.postValue(dataSnapshot.getValue(Product.class));
-
                     Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.getValue(Product.class)).getProductName() + " has been found");
+                    // Post value is because it's thread safe
+                    productLiveDataMain.postValue(dataSnapshot.getValue(Product.class));
                 });
             }
             else

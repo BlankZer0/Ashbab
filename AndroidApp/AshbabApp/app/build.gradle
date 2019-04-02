@@ -49,7 +49,7 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     // Provides ArFragment, and other Sceneform UX resources:
-    implementation "com.google.ar.sceneform.ux:sceneform-ux:1.7.0"
+    implementation "com.google.ar.sceneform.ux:sceneform-ux:$sceneform_version"
 
     // test components
     testImplementation "junit:junit:$junit_version"

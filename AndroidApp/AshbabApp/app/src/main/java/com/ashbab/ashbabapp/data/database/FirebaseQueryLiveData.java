@@ -28,6 +28,9 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
     public FirebaseQueryLiveData(DatabaseReference ref)
     {
         this.query = ref;
+
+        // caches the data from firebase locally
+        query.keepSynced(true);
     }
 
     private final Runnable removeListener = new Runnable()
@@ -82,7 +85,7 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s)
         {
             Log.v(LOG_TAG, "MyChildEventListener: onChildChanged called");
-            setValue(dataSnapshot);
+            //setValue(dataSnapshot);
         }
         @Override
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot)

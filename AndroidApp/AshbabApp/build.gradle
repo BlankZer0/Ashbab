@@ -13,7 +13,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.2.0'
 
         // Dependency for sceneform SDK
-        classpath 'com.google.ar.sceneform:plugin:1.7.0'
+        classpath 'com.google.ar.sceneform:plugin:1.8.0'
         
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -39,6 +39,8 @@ ext.firebase_core_version = "16.0.8"
 ext.firebase_database_version = '16.1.0'
 
 ext.glide_version = '4.9.0' // Image loading and caching
+
+ext.sceneform_version = '1.8.0'  // Sceneform SDK used for AR
 
 // test components
 ext.junit_version = '4.12'

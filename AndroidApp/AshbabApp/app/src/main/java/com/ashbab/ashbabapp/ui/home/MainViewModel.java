@@ -15,12 +15,11 @@ public class MainViewModel extends ViewModel
 {
     private static final String LOG_TAG = MainViewModel.class.getSimpleName();
 
-    private AshbabRepository ashbabRepository;
     private LiveData<Product> productLiveData;
 
     public MainViewModel()
     {
-        ashbabRepository = new AshbabRepository();
+        AshbabRepository ashbabRepository = new AshbabRepository();
         productLiveData = ashbabRepository.getLiveDataForHomeCards();
     }
 
