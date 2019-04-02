@@ -1,8 +1,11 @@
 package com.ashbab.ashbabapp.data.model;
 
+import org.parceler.Parcel;
+
 /**
  * The Java Bean class of a product
  */
+@Parcel
 public class Product
 {
     private String productID;
@@ -74,5 +77,19 @@ public class Product
     public String getDescription()
     {
         return description;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Product{" +
+                "productID='" + productID + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productPrice=" + productPrice +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", model3dUrl='" + model3dUrl + '\'' +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

@@ -1,12 +1,11 @@
 package com.ashbab.ashbabapp.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
 
-import com.ashbab.ashbabapp.ui.productPage.ProductDetails;
+import com.ashbab.ashbabapp.ui.productPage.ProductDetailsActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private MainProductAdapter mainProductAdapter;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,9 +58,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         // Create a list to hold all the products to be shown in the recycler view
-        ArrayList<Product> products = new ArrayList<>();
+        ArrayList<Product> gridProducts = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.rv_newly_added);
+        // Create a list of products that holds every attribute of the product
+        ArrayList<Product> completeProducts = new ArrayList<>();
+
+        RecyclerView recyclerView = findViewById(R.id.rv_newly_added);
         // improves performance because changes  that changes in content
         // do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(layoutManager);
 
         // specify the adapter to populate the recyclerView
-        mainProductAdapter = new MainProductAdapter(products);
+        mainProductAdapter = new MainProductAdapter(gridProducts);
         recyclerView.setAdapter(mainProductAdapter);
 
         // Selects the viewModel to fetch the data needed for the activity
@@ -91,22 +92,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 float productPrice = product.getProductPrice();
                 String imageUrl = product.getImageUrl();
 
-                products.add(new Product(productName, productPrice, imageUrl));
+                completeProducts.add(product);
+                gridProducts.add(new Product(productName, productPrice, imageUrl));
                 Log.v(LOG_TAG, productName + " has been added to the list");
 
                 mainProductAdapter.notifyDataSetChanged();
-//                mainProductAdapter = new MainProductAdapter(products);
-//                recyclerView.setAdapter(mainProductAdapter);
             }
         });
 
         // Attaches an item listener to the recycler view items
         mainProductAdapter.setOnItemClickListener((view, position) ->
         {
+            Log.v(LOG_TAG, "The position of the selected item: " + position);
             // Stop listening to data change before switching to another activity
             liveData.removeObservers(this);
-            Intent productDetailsIntent = new Intent(MainActivity.this, ProductDetails.class);
-            startActivity(productDetailsIntent);
+
+            // Get the product from the user selected location
+            Product parceledProduct = completeProducts.get(position);
+
+            Log.v(LOG_TAG, parceledProduct.toString());
+
+            // Open the product details activity and show details of the selected product
+            startActivity(ProductDetailsActivity.buildIntent(this, parceledProduct));
         });
     }
 
