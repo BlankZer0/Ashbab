@@ -8,6 +8,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
+
+        //Dependency for google services
+        classpath 'com.google.gms:google-services:4.2.0'
+
+        // Dependency for sceneform SDK
+        classpath 'com.google.ar.sceneform:plugin:1.8.0'
         
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -20,6 +26,29 @@ allprojects {
         jcenter()
         
     }
+}
+
+ext {
+    // support
+    support_version = '1.1.0-alpha04'
+    material_version = '1.1.0-alpha05'
+
+    lifecycle_version  = '2.1.0-alpha03' // architecture components
+
+    // firebase
+    firebase_core_version = "16.0.8"
+    firebase_database_version = '16.1.0'
+
+    glide_version = '4.9.0' // Image loading and caching
+
+    parceler_version = '1.1.12'
+
+    sceneform_version = '1.8.0'  // Sceneform SDK used for AR
+
+// test components
+    junit_version = '4.12'
+    test_version = '1.1.2-alpha02'
+    espresso_version = '3.2.0-alpha02'
 }
 
 task clean(type: Delete) {
