@@ -54,6 +54,8 @@ dependencies {
 
     // Provides ArFragment, and other Sceneform UX resources:
     implementation "com.google.ar.sceneform.ux:sceneform-ux:$sceneform_version"
+    implementation "com.google.ar.sceneform:assets:$sceneform_version"
+
 
     // test components
     testImplementation "junit:junit:$junit_version"
@@ -62,9 +64,3 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$test_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 }
-
-
-sceneform.asset('sampledata/Chair.obj',
-        'default',
-        'sampledata/Chair.sfa',
-        'src/main/assets/Chair')

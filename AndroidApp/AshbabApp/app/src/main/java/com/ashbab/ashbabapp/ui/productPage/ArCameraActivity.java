@@ -17,6 +17,7 @@ import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.assets.RenderableSource;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
@@ -31,6 +32,10 @@ public class ArCameraActivity extends AppCompatActivity
 
     private ArFragment arFragment;
     private ModelRenderable modelRenderable;
+
+    // Link of the 3D Object
+    private static final String GLTF_ASSET =
+            "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF/Duck.gltf";
 
     @Override
     @SuppressWarnings("FutureReturnValueIgnored")
@@ -49,15 +54,20 @@ public class ArCameraActivity extends AppCompatActivity
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
         // When you build a Renderable, Sceneform loads its resources in the background
-        // while returning a CompletableFuture.
+        // while returning a CompletableFuture, means the object is being built on a separate thread
         ModelRenderable.builder()
-                .setSource(this, Uri.parse("Chair.sfb"))
+                .setSource(this, RenderableSource.builder().setSource(
+                        this, Uri.parse(GLTF_ASSET), RenderableSource.SourceType.GLTF2)
+                        .setScale(0.5f)  // Scale the original image to 50%
+                        .setRecenterMode(RenderableSource.RecenterMode.ROOT)
+                        .build())
+                .setRegistryId(GLTF_ASSET)
                 .build()
                 .thenAccept(renderable -> modelRenderable = renderable)
                 .exceptionally(
                         throwable -> {
                             Toast toast =
-                                    Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
+                                    Toast.makeText(this, "Unable to load renderable", Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                             return null;
