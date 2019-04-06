@@ -60,46 +60,18 @@ public class ArCameraActivity extends AppCompatActivity
         Log.v(LOG_TAG, LOG_TAG + " Created");
 
         // Link of the 3D Object
-        String asset = Objects.requireNonNull(getIntent().getExtras()).getString(URL_KEY);
-        Log.v(LOG_TAG, "Asset Link: " + asset);
+        String assetUrl = Objects.requireNonNull(getIntent().getExtras()).getString(URL_KEY);
+        Log.v(LOG_TAG, "Asset Link: " + assetUrl);
 
-        // When you build a Renderable, Sceneform loads its resources in the background
-        // while returning a CompletableFuture, means the object is being built on a separate thread
-        ModelRenderable.builder()
-                .setSource(this, RenderableSource.builder().setSource(
-                        this, Uri.parse(asset), RenderableSource.SourceType.GLB)
-                        .setScale(0.25f)  // Scale the original image to 25%
-                        .setRecenterMode(RenderableSource.RecenterMode.ROOT)
-                        .build())
-                .setRegistryId(asset)
-                .build()
-                .thenAccept(renderable -> modelRenderable = renderable)
-                .exceptionally(
-                        throwable -> {
-                            Toast toast =
-                                    Toast.makeText(this, "Unable to load renderable", Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return null;
-                        });
+        buildRenderableModelFromSource(assetUrl);
 
         // Anchors the 3D object on the detected plain
         arFragment.setOnTapArPlaneListener(
                 (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-                    if (modelRenderable == null) {
+                    if (modelRenderable == null)
                         return;
-                    }
 
-                    // Create the Anchor.
-                    Anchor anchor = hitResult.createAnchor();
-                    AnchorNode anchorNode = new AnchorNode(anchor);
-                    anchorNode.setParent(arFragment.getArSceneView().getScene());
-
-                    // Create the transformable model and add it to the anchor.
-                    TransformableNode transformableNode = new TransformableNode(arFragment.getTransformationSystem());
-                    transformableNode.setParent(anchorNode);
-                    transformableNode.setRenderable(modelRenderable);
-                    transformableNode.select();
+                    attachModelToAnchor(hitResult);
                 });
     }
 
@@ -133,6 +105,47 @@ public class ArCameraActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+
+    /**
+     * Builds a renderable model on runtime as sceneform loads it's resources in the background
+     * @param asset is the URL of the GLB file
+     */
+    public void buildRenderableModelFromSource (String asset)
+    {
+        // Returns a CompletableFuture, means the object is being built on a separate thread
+        ModelRenderable.builder()
+                .setSource(this, RenderableSource.builder().setSource(
+                        this, Uri.parse(asset), RenderableSource.SourceType.GLB)
+                        .setRecenterMode(RenderableSource.RecenterMode.ROOT)
+                        .build())
+                .setRegistryId(asset)
+                .build()
+                .thenAccept(renderable -> modelRenderable = renderable)
+                .exceptionally(
+                        throwable -> {
+                            Toast toast =
+                                    Toast.makeText(this, "Unable to load renderable", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            return null;
+                        });
+    }
+
+    public void attachModelToAnchor(HitResult hitResult)
+    {
+        // Create the Anchor.
+        Anchor anchor = hitResult.createAnchor();
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        anchorNode.setParent(arFragment.getArSceneView().getScene());
+
+        // Create the transformable model and add it to the anchor.
+        TransformableNode transformableNode = new TransformableNode(arFragment.getTransformationSystem());
+        transformableNode.getScaleController().setMinScale(0.25f);
+        transformableNode.getScaleController().setMaxScale(0.5f);
+        transformableNode.setParent(anchorNode);
+        transformableNode.setRenderable(modelRenderable);
+        transformableNode.select();
     }
 
     /**

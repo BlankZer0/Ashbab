@@ -114,19 +114,25 @@
         android:text="@string/title_description"
         android:textAppearance="?android:textAppearanceMedium"/>
 
-    <TextView
-        android:id="@+id/description_details"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/activity_vertical_margin"
-        android:paddingEnd="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/horizontal_spacing"
-        android:paddingBottom="@dimen/horizontal_spacing"
-        android:layout_below="@id/description_title"
-        android:gravity="start"
-        android:text="@string/default_description"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@android:color/black"
-        android:fontFamily="sans-serif-light" />
+        android:layout_below="@id/description_title">
+
+        <TextView
+            android:id="@+id/description_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/horizontal_spacing"
+            android:paddingBottom="@dimen/horizontal_spacing"
+            android:gravity="start"
+            android:text="@string/default_description"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            android:fontFamily="sans-serif-light" />
+
+    </ScrollView>
 
 </RelativeLayout>
