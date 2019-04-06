@@ -24,7 +24,7 @@ import java.util.Objects;
 public class ProductDetailsActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = ProductDetailsActivity.class.getSimpleName();
-    private static final String PARCEL_KEY = "parcel_key";
+    private static final String PARCEL_KEY = "parcel_key";  // key to get the parceled product
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,10 +56,10 @@ public class ProductDetailsActivity extends AppCompatActivity
 
         // Open the camera to show the AR model when the AR button has been clicked
         arButton.setOnClickListener(v ->
-        {
-            Intent arCameraIntent = new Intent(ProductDetailsActivity.this, ArCameraActivity.class);
-            startActivity(arCameraIntent);
-        });
+                {
+                    Log.v(LOG_TAG, "AR Button Clicked");
+                    startActivity(ArCameraActivity.buildIntent(this, parceledProduct.getModel3dUrl()));
+                });
     }
 
     /**

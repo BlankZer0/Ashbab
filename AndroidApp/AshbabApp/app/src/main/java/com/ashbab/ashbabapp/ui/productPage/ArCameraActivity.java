@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,20 +23,20 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import java.util.Objects;
+
 /**
  * This class is responsible for handling the Camera view that shows the Augmented Reality Model
  */
 public class ArCameraActivity extends AppCompatActivity
 {
-    private static final String TAG = ArCameraActivity.class.getSimpleName();
+    private static final String LOG_TAG = ArCameraActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
 
     private ArFragment arFragment;
     private ModelRenderable modelRenderable;
 
-    // Link of the 3D Object
-    private static final String GLTF_ASSET =
-            "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF/Duck.gltf";
+    private static final String URL_KEY = "url_key";  // key to get the url string
 
     @Override
     @SuppressWarnings("FutureReturnValueIgnored")
@@ -45,6 +46,9 @@ public class ArCameraActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
+        Log.v(LOG_TAG, LOG_TAG + " Created");
+
+        // Check whether or not the device supports AR
         if (!checkIsSupportedDeviceOrFinish(this))
         {
             return;
@@ -53,15 +57,21 @@ public class ArCameraActivity extends AppCompatActivity
         setContentView(R.layout.activity_ar_camera);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
+        Log.v(LOG_TAG, LOG_TAG + " Created");
+
+        // Link of the 3D Object
+        String asset = Objects.requireNonNull(getIntent().getExtras()).getString(URL_KEY);
+        Log.v(LOG_TAG, "Asset Link: " + asset);
+
         // When you build a Renderable, Sceneform loads its resources in the background
         // while returning a CompletableFuture, means the object is being built on a separate thread
         ModelRenderable.builder()
                 .setSource(this, RenderableSource.builder().setSource(
-                        this, Uri.parse(GLTF_ASSET), RenderableSource.SourceType.GLTF2)
-                        .setScale(0.5f)  // Scale the original image to 50%
+                        this, Uri.parse(asset), RenderableSource.SourceType.GLB)
+                        .setScale(0.25f)  // Scale the original image to 25%
                         .setRecenterMode(RenderableSource.RecenterMode.ROOT)
                         .build())
-                .setRegistryId(GLTF_ASSET)
+                .setRegistryId(asset)
                 .build()
                 .thenAccept(renderable -> modelRenderable = renderable)
                 .exceptionally(
@@ -116,12 +126,29 @@ public class ArCameraActivity extends AppCompatActivity
                         .getDeviceConfigurationInfo()
                         .getGlEsVersion();
         if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
-            Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
+            Log.e(LOG_TAG, "Sceneform requires OpenGL ES 3.0 later");
             Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
                     .show();
             activity.finish();
             return false;
         }
         return true;
+    }
+
+    /**
+     * By using this method other activities can create an intent to start this activity
+     * @param context of the previous activity
+     * @param modelUrl sent from the previous activity
+     * @return the intent required for starting ProductDetailsActivity
+     */
+    public static Intent buildIntent(Context context, String modelUrl)
+    {
+        Intent intent = new Intent(context, ArCameraActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(URL_KEY, modelUrl);
+        intent.putExtras(bundle);
+
+        Log.v(LOG_TAG, "AR Camera Activity Intent built");
+        return intent;
     }
 }
