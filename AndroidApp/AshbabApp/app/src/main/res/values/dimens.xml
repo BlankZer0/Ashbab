@@ -12,9 +12,11 @@
     <dimen name="nav_header_height">176dp</dimen>
 
     <!-- Home card Size -->
-    <dimen name="card_main_height">220dp</dimen>
+    <dimen name="card_main_height">216dp</dimen>
     <dimen name="card_main_width">160dp</dimen>
     <dimen name="card_image_height">160dp</dimen>
+    <dimen name="card_radius">8dp</dimen>
+    <dimen name="card_text_size">16sp</dimen>
 
     <!-- Product Details -->
     <dimen name="product_image_height">300dp</dimen>
