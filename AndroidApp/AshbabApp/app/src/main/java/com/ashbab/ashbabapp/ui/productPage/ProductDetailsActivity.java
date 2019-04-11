@@ -1,18 +1,20 @@
 package com.ashbab.ashbabapp.ui.productPage;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.parceler.Parcels;
 
@@ -25,6 +27,8 @@ public class ProductDetailsActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = ProductDetailsActivity.class.getSimpleName();
     private static final String PARCEL_KEY = "parcel_key";  // key to get the parceled product
+
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,15 +43,27 @@ public class ProductDetailsActivity extends AppCompatActivity
 
         Log.v(LOG_TAG, Objects.requireNonNull(parceledProduct).toString());
 
+        // set the modified toolbar as the action bar
+        toolbar = findViewById(R.id.toolbar_product_details);
+        toolbar.setTitle(parceledProduct.getProductName());
+        setSupportActionBar(toolbar);
+
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab_buy_product);
+        fab.setOnClickListener((view) ->
+        {
+            // TODO: Add buy product Logic
+        });
+
+
         // find the layout contents
         final ImageView productImage = findViewById(R.id.product_image_view_details);
         final TextView productName = findViewById(R.id.product_text_view_details);
         final TextView productPrice = findViewById(R.id.price_text_view_details);
         final TextView productCategory = findViewById(R.id.category_tag_details);
         final TextView productDescription = findViewById(R.id.description_details);
-        final Button arButton = findViewById(R.id.ar_button_details);
+        final FloatingActionButton arButton = findViewById(R.id.ar_button_details);
 
-        // update the UI here
+        // update the UI content
         Glide.with(productImage.getContext()).load(parceledProduct.getImageUrl()).into(productImage);
         productName.setText(parceledProduct.getProductName());
         productPrice.setText(String.valueOf(parceledProduct.getProductPrice()));
@@ -60,6 +76,9 @@ public class ProductDetailsActivity extends AppCompatActivity
                     Log.v(LOG_TAG, "AR Button Clicked");
                     startActivity(ArCameraActivity.buildIntent(this, parceledProduct.getModel3dUrl()));
                 });
+
+        toolbar.setNavigationOnClickListener((view) ->
+            onBackPressed());
     }
 
     /**

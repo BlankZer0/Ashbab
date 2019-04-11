@@ -4,9 +4,10 @@
     <color name="color_primary">#795548</color>
     <color name="color_primary_dark">#5D4037</color>
     <color name="color_primary_light">#D7CCC8</color>
-    <color name="color_accent">#FF5252</color>
+    <color name="color_accent">#E0E0E0</color>
     <color name="color_primary_text">#212121</color>
     <color name="color_secondary_text">#757575</color>
+    <color name="color_button_text">#FFFFFF</color>
     <color name="color_icons">#FFFFFF</color>
     <color name="color_divider">#BDBDBD</color>
 </resources>

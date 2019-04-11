@@ -4,7 +4,7 @@
     <!-- Activity Margins -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="vertical_spacing">8dp</dimen>
+    <dimen name="vertical_spacing">4dp</dimen>
     <dimen name="horizontal_spacing">4dp</dimen>
 
     <!-- Navigation Bar Margins -->
@@ -12,18 +12,18 @@
     <dimen name="nav_header_height">176dp</dimen>
 
     <!-- Home card Size -->
-    <dimen name="card_main_height">216dp</dimen>
+    <dimen name="card_main_height">224dp</dimen>
     <dimen name="card_main_width">160dp</dimen>
     <dimen name="card_image_height">160dp</dimen>
     <dimen name="card_radius">8dp</dimen>
     <dimen name="card_text_size">16sp</dimen>
 
     <!-- Product Details -->
-    <dimen name="product_image_height">300dp</dimen>
+    <dimen name="product_image_height">400dp</dimen>
 
-    <!-- Font Size -->
-    <dimen name="body_font_size">16sp</dimen>
-    <dimen name="header_font_size">20sp</dimen>
+    <!-- Text Size -->
+    <dimen name="body_text_size">16sp</dimen>
+    <dimen name="header_text_size">20sp</dimen>
 
     <!-- Ar Icon -->
     <dimen name="ar_icon_size">60dp</dimen>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ui.productPage.ProductDetailsActivity">
+
+        <ImageView
+            android:id="@+id/product_image_view_details"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/product_image_height"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription"
+            tools:src="@mipmap/ic_launcher_round" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:id="@+id/ar_button_details"
+            android:layout_width="@dimen/ar_icon_size"
+            android:layout_height="@dimen/ar_icon_size"
+            android:layout_alignEnd="@id/product_image_view_details"
+            android:layout_alignBottom="@id/product_image_view_details"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            app:srcCompat="@drawable/icons8_3d_model"
+            app:backgroundTint="@color/color_accent" />
+
+        <TextView
+            android:id="@+id/product_text_view_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_image_view_details"
+            android:paddingStart="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/horizontal_spacing"
+            android:paddingEnd="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/horizontal_spacing"
+            android:text="@string/default_home_card_name"
+            android:textSize="@dimen/header_text_size"
+            android:textColor="@color/color_primary_text"
+            android:fontFamily="@font/oswald_bold"/>
+
+        <TextView
+            android:id="@+id/category_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_text_view_details"
+            android:paddingStart="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/horizontal_spacing"
+            android:paddingEnd="@dimen/vertical_spacing"
+            android:paddingBottom="@dimen/horizontal_spacing"
+            android:text="@string/title_category"
+            android:textSize="@dimen/header_text_size"
+            android:textColor="@color/color_primary_text"
+            android:fontFamily="@font/oswald_regular" />
+
+        <TextView
+            android:id="@+id/category_tag_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_text_view_details"
+            android:layout_toEndOf="@id/category_title"
+            android:padding="@dimen/vertical_spacing"
+            android:text="@string/default_category_tag"
+            android:textSize="@dimen/header_text_size"
+            android:textColor="@color/color_primary_text"
+            android:fontFamily="@font/oswald_regular"/>
+
+        <TextView
+            android:id="@+id/takaID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_text_view_details"
+            android:layout_toStartOf="@id/price_text_view_details"
+            android:padding="@dimen/vertical_spacing"
+            android:text="@string/taka_sign"
+            android:textSize="@dimen/header_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/color_primary_text"
+            android:fontFamily="@font/oswald_semi_bold"/>
+
+        <TextView
+            android:id="@+id/price_text_view_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_text_view_details"
+            android:layout_alignParentEnd="true"
+            android:paddingStart="@dimen/vertical_spacing"
+            android:paddingTop="@dimen/horizontal_spacing"
+            android:paddingEnd="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/horizontal_spacing"
+            android:text="@string/default_home_card_price"
+            android:textSize="@dimen/header_text_size"
+            android:textColor="@color/color_primary_text"
+            android:fontFamily="@font/oswald_semi_bold"/>
+
+        <View
+            android:id="@+id/content_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/takaID"
+            android:background="@color/color_divider"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+        <TextView
+            android:id="@+id/description_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/category_title"
+            android:paddingStart="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/horizontal_spacing"
+            android:paddingEnd="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/horizontal_spacing"
+            android:text="@string/title_description"
+            android:textSize="@dimen/header_text_size"
+            android:textColor="@color/color_primary_text"
+            android:fontFamily="@font/oswald_regular"/>
+
+            <TextView
+             android:id="@+id/description_details"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/description_title"
+             android:paddingStart="@dimen/activity_vertical_margin"
+             android:paddingTop="@dimen/horizontal_spacing"
+             android:paddingEnd="@dimen/activity_vertical_margin"
+             android:paddingBottom="@dimen/horizontal_spacing"
+             android:text="@string/default_description"
+             android:textSize="@dimen/body_text_size"
+             android:textColor="@color/color_secondary_text"
+             android:fontFamily="@font/oswald_regular"/>
+
+    </RelativeLayout>
+</ScrollView>

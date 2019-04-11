@@ -22,6 +22,7 @@
     <string name="taka_sign"> ৳ </string>
     <string name="title_description">Product Description</string>
     <string name="title_category">Category: </string>
+    <string name="fab_buy">Buy Product</string>
 
     <!-- Default Values -->
     <string name="default_home_card_name">Sample Chair</string>
