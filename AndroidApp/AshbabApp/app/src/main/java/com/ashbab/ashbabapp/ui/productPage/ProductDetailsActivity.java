@@ -45,15 +45,14 @@ public class ProductDetailsActivity extends AppCompatActivity
 
         // set the modified toolbar as the action bar
         toolbar = findViewById(R.id.toolbar_product_details);
-        toolbar.setTitle(parceledProduct.getProductName());
         setSupportActionBar(toolbar);
 
-        ExtendedFloatingActionButton fab = findViewById(R.id.fab_buy_product);
-        fab.setOnClickListener((view) ->
+        // Find the floating action button and listen for clicks
+        ExtendedFloatingActionButton exFab = findViewById(R.id.fab_buy_product);
+        exFab.setOnClickListener((view) ->
         {
             // TODO: Add buy product Logic
         });
-
 
         // find the layout contents
         final ImageView productImage = findViewById(R.id.product_image_view_details);
@@ -61,7 +60,7 @@ public class ProductDetailsActivity extends AppCompatActivity
         final TextView productPrice = findViewById(R.id.price_text_view_details);
         final TextView productCategory = findViewById(R.id.category_tag_details);
         final TextView productDescription = findViewById(R.id.description_details);
-        final FloatingActionButton arButton = findViewById(R.id.ar_button_details);
+        final FloatingActionButton arButton = findViewById(R.id.ar_fab);
 
         // update the UI content
         Glide.with(productImage.getContext()).load(parceledProduct.getImageUrl()).into(productImage);

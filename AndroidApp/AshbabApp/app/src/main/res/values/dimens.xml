@@ -19,7 +19,7 @@
     <dimen name="card_text_size">16sp</dimen>
 
     <!-- Product Details -->
-    <dimen name="product_image_height">400dp</dimen>
+    <dimen name="product_image_height">500dp</dimen>
 
     <!-- Text Size -->
     <dimen name="body_text_size">16sp</dimen>
@@ -27,5 +27,8 @@
 
     <!-- Ar Icon -->
     <dimen name="ar_icon_size">60dp</dimen>
+
+    <!-- USer Profile Picture -->
+    <dimen name="profile_pic_length">72dp</dimen>
 
 </resources>

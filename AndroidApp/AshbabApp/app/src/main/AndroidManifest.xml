@@ -27,7 +27,6 @@
         <activity android:name=".ui.productPage.ArCameraActivity"/>
 
         <activity android:name=".ui.productPage.ProductDetailsActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
