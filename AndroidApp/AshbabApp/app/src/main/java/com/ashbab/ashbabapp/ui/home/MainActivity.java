@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Inflates the main menu to add items to the action bar
+     * Inflates the appbar_items menu to add items to the action bar
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.appbar_items, menu);
         return true;
     }
 

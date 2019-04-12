@@ -28,8 +28,6 @@ public class ProductDetailsActivity extends AppCompatActivity
     private static final String LOG_TAG = ProductDetailsActivity.class.getSimpleName();
     private static final String PARCEL_KEY = "parcel_key";  // key to get the parceled product
 
-    Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -43,9 +41,7 @@ public class ProductDetailsActivity extends AppCompatActivity
 
         Log.v(LOG_TAG, Objects.requireNonNull(parceledProduct).toString());
 
-        // set the modified toolbar as the action bar
-        toolbar = findViewById(R.id.toolbar_product_details);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_product_details);
 
         // Find the floating action button and listen for clicks
         ExtendedFloatingActionButton exFab = findViewById(R.id.fab_buy_product);
