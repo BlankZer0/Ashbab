@@ -19,7 +19,7 @@
     <string name="category_chair">Chair</string>
     <string name="category_table">Table</string>
 
-    <!-- Home appbar_items content -->
+    <!-- Home appbar_items_main content -->
     <string name="title_newly_added">Newly Added</string>
 
     <!-- Product Details Content -->
@@ -27,6 +27,9 @@
     <string name="title_description">Product Description</string>
     <string name="title_category">Category: </string>
     <string name="fab_buy">Buy Product</string>
+
+    <!-- Search Results Content -->
+    <string name="title_search_results"> Search Results </string>
 
     <!-- Default Values -->
     <string name="default_home_card_name">Sample Chair</string>

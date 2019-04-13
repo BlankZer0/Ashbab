@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ashbab.ashbabapp">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Always needed for AR. -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Always needed for AR. -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- This tag indicates that this application requires ARCore. This results in the application
-        only being visible in the Google Play Store on devices that support ARCore. -->
-    <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
+    <!--
+ This tag indicates that this application requires ARCore. This results in the application
+        only being visible in the Google Play Store on devices that support ARCore.
+    -->
+    <uses-feature
+        android:name="android.hardware.camera.ar"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -18,16 +21,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <!-- This tag indicates that this application requires ARCore. This results in the
+        <!--
+         This tag indicates that this application requires ARCore. This results in the
         application only being visible in the Google Play Store on devices that support
-        ARCore. -->
-        <meta-data android:name="com.google.ar.core" android:value="required" />
-
-        <activity android:name=".ui.productPage.ArCameraActivity"/>
-
-        <activity android:name=".ui.productPage.ProductDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        ARCore.
+        -->
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
 
         <activity
             android:name=".ui.home.MainActivity"
@@ -38,5 +39,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.productPage.ProductDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".ui.productPage.ArCameraActivity" />
+
+        <activity
+            android:name=".ui.searchProduct.SearchProductActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
+
 </manifest>

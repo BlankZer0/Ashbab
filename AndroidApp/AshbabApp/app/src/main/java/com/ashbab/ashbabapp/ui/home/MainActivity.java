@@ -6,7 +6,9 @@ import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
 
 import com.ashbab.ashbabapp.ui.productPage.ProductDetailsActivity;
+import com.ashbab.ashbabapp.ui.searchProduct.SearchProductActivity;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     // Tag to be used for debugging
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG =  MainActivity.class.getSimpleName();
 
     private MainProductAdapter mainProductAdapter;
 
@@ -115,6 +117,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Open the product details activity and show details of the selected product
             startActivity(ProductDetailsActivity.buildIntent(this, parceledProduct));
         });
+
+        TextInputEditText searchProduct = findViewById(R.id.search_product_main);
+
+        // Start the searchProductActivity whenever the searchProduct toolbar is clicked
+        searchProduct.setOnClickListener(view ->
+                {
+                    Log.v(LOG_TAG, "Search Product Clicked");
+                    liveData.removeObservers(this);
+                    startActivity(SearchProductActivity.buildIntent(this));
+                });
     }
 
     /**
@@ -136,19 +148,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Inflates the appbar_items menu to add items to the action bar
+     * Inflates the appbar_items_main menu to add items to the action bar
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.appbar_items, menu);
+        getMenuInflater().inflate(R.menu.appbar_items_main, menu);
         return true;
     }
 
     /**
-     * Handle action bar item clicks here. The action bar will
-     * automatically handle clicks on the Home/Up button, so long
-     * as you specify a parent activity in AndroidManifest.xml.
+     * Action bar item clicks are handled here.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -156,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+        if (id == R.id.action_settings_main)
         {
             return true;
         }
