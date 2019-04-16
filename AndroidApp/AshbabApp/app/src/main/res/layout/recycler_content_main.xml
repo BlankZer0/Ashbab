@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.CardView"
-    android:id="@+id/card_view"
+    android:id="@+id/card_view_main"
     android:layout_width="@dimen/card_main_width"
     android:layout_height="@dimen/card_main_height"
     android:layout_marginStart="@dimen/activity_vertical_margin"
@@ -12,7 +12,7 @@
     android:layout_marginTop="@dimen/activity_horizontal_margin"
     android:layout_weight="1"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="@dimen/card_radius">
+    card_view:cardCornerRadius="@dimen/card_main_radius">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         <ImageView
             android:id="@+id/product_image_view_main"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_image_height"
+            android:layout_height="@dimen/card_main_image_height"
             android:scaleType="centerCrop"
             tools:src="@mipmap/ic_launcher"
             tools:ignore="ContentDescription" />
@@ -45,7 +45,7 @@
 
             <TextView
                 style="@style/TextAppearance.AppText.Card2"
-                android:id="@+id/takaID"
+                android:id="@+id/taka_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/vertical_spacing"
