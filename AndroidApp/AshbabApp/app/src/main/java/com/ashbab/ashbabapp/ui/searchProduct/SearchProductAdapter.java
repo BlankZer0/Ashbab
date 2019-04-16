@@ -1,4 +1,4 @@
-package com.ashbab.ashbabapp.ui.home;
+package com.ashbab.ashbabapp.ui.searchProduct;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * The adapter to populate the recycler view on the Main activity
  */
-public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.ProductViewHolder>
+public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductAdapter.ProductViewHolder>
 {
     // Define listener member variable
     private static OnItemClickListener listener;
@@ -32,7 +32,7 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
     // Define the method that allows the parent activity or fragment to define the listener
     void setOnItemClickListener(OnItemClickListener listener)
     {
-        MainProductAdapter.listener = listener;
+        SearchProductAdapter.listener = listener;
     }
 
     private List<Product> productList;
@@ -51,9 +51,9 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
         {
             super(productView);
 
-            nameTextView = productView.findViewById(R.id.product_text_view_main);
-            priceTextView = productView.findViewById(R.id.price_text_view_main);
-            productImageView = productView.findViewById(R.id.product_image_view_main);
+            nameTextView = productView.findViewById(R.id.product_text_view_search);
+            priceTextView = productView.findViewById(R.id.price_text_view_search);
+            productImageView = productView.findViewById(R.id.product_image_view_search);
 
             // Setup the click listener that will listen for item clicks
             productView.setOnClickListener(v ->
@@ -65,7 +65,7 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
         }
     }
 
-    MainProductAdapter(ArrayList<Product> productList)
+    SearchProductAdapter(ArrayList<Product> productList)
     {
         this.productList = productList;
     }
@@ -73,9 +73,9 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public MainProductAdapter.ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public SearchProductAdapter.ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        int layoutForListItem = R.layout.recycler_content_main;
+        int layoutForListItem = R.layout.recycler_content_search;
         View view = LayoutInflater.from(parent.getContext()).inflate(layoutForListItem, parent, false);
         return new ProductViewHolder(view);
     }
