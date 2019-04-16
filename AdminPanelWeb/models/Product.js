@@ -4,9 +4,8 @@
  only hold the url of their download links
 */
 
-class Product{
+class product{
     constructor(id, name, category, description, image, model, price){
-    
         this.id = id;
         this.name = name;
         this.category = category;

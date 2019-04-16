@@ -10,7 +10,9 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
+//Reference to database
+const productsRef = firebase.database().ref('Products');
+const storage = firebase.storage().ref();
 //Global variables
 var imageUrl;
 var modelUrl;
@@ -19,13 +21,19 @@ const MODEL_UPLOADER = document.getElementById('modelUploader');
 const IMAGE_FILE_BUTTON = document.getElementById('imageFile');
 const MODEL_FILE_BUTTON = document.getElementById('modelFile');
 
-
 IMAGE_FILE_BUTTON.addEventListener('change', function(e){
-    var imageFileName = e.target.files[0].name + Date.now();
-    var imageStorageRef = firebase.storage().ref("Product-2D-Images/" + imageFileName);
+    var selectedImageFile = e.target.files[0];
+    var imageFileName = selectedImageFile.name;
 
-    var imageUploadTask = imageStorageRef.put(selectedImageFile);
-    imageUploadTask.on('state_changed', 
+    if(!validImage(imageFileName)){
+        alert(imageFileName + " Image must be in jpg format!");
+    }
+    else{
+        var imageFileName = selectedImageFile.name + Date.now();
+        var imageStorageRef = firebase.storage().ref("Product-2D-Images/" + imageFileName);
+        var imageUploadTask = imageStorageRef.put(selectedImageFile);
+        
+        imageUploadTask.on('state_changed', 
         function progress(snapshot){
             var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             IMAGE_UPLOADER.value = percentage;
@@ -40,13 +48,23 @@ IMAGE_FILE_BUTTON.addEventListener('change', function(e){
                 // Handle any errors
               });
         });
-});
-MODEL_FILE_BUTTON.addEventListener('change', function(e){
-    var modelFileName = e.target.files[0].name + Date.now();
-    var modelStorageRef = firebase.storage().ref("Product-3D-Models/" + modelFileName );
+    }
 
-    var modelUploadTask = modelStorageRef.put(selectedModelFile);
-    modelUploadTask.on('state_changed', 
+    
+});
+
+MODEL_FILE_BUTTON.addEventListener('change', function(e){
+    var selectedModelFile = e.target.files[0];
+    var modelFileName = selectedModelFile.name;
+
+    if(!valid3DModel(modelFileName)){
+        alert(modelFileName + " Model must be in glb format!");
+    }
+    else{
+        var modelFileName = selectedModelFile.name + Date.now();
+        var modelStorageRef = firebase.storage().ref("Product-3D-Models/" + modelFileName );
+        var modelUploadTask = modelStorageRef.put(selectedModelFile);
+        modelUploadTask.on('state_changed', 
         function progress(snapshot){
             var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             MODEL_UPLOADER.value = percentage;
@@ -61,19 +79,17 @@ MODEL_FILE_BUTTON.addEventListener('change', function(e){
                 // Handle any errors
               });
         });
+    }
+    
 });
 
-
-//Reference to database
-var productsRef = firebase.database().ref('Products');
-var storage = firebase.storage().ref();
 
 //Main
 document.getElementById('contactForm').addEventListener('submit', submitForm);
 
 function submitForm(e){
     e.preventDefault();
-
+    
     var id = getInputval("id");
     var name = getInputval("name");
     var category = getInputval("category");
@@ -81,8 +97,15 @@ function submitForm(e){
     var image = imageUrl;
     var model = modelUrl;
     var price = parseFloat(getInputval("price"));
+
+    if(!validPrice(price)){
+        alert("Not a valid price");
+    }
+    else{
+        saveProduct(id, name, category, description, image, model, price);
+    }
     
-    saveProduct(id, name, category, description, image, model, price);
+    
 }
 
 function getInputval(id){
