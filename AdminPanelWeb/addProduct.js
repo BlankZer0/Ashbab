@@ -30,54 +30,7 @@ imageFileButton.addEventListener('change', function(e){
     selectedImageFile = e.target.files[0];
     imageFileName = selectedImageFile.name + Date.now();
     imageStorageRef = firebase.storage().ref("Product-2D-Images/" + imageFileName);
-});
-modelFileButton.addEventListener('change', function(e){
-    selectedModelFile = e.target.files[0];
-    modelFileName = selectedModelFile.name + Date.now();
-    modelStorageRef = firebase.storage().ref("Product-3D-Models/" + modelFileName );
-});
 
-
-//Reference to database
-var productsRef = firebase.database().ref('Products');
-var storage = firebase.storage().ref();
-
-//Main
-document.getElementById('contactForm').addEventListener('submit', submitForm);
-
-function submitForm(e){
-    e.preventDefault();
-    
-    var id = getInputval("id");
-    var name = getInputval("name");
-    var category = getInputval("category");
-    var description = getInputval("description");
-    var image = imageUrl;
-    var model = modelUrl;
-    var price = parseFloat(getInputval("price"));
-
-    uploadFilesToStorage();
-    saveProduct(id, name, category, description, image, model, price);
-
-}
-
-function getInputval(id){
-    return document.getElementById(id).value;
-}
-
-function saveProduct(id, name, category, description, image, model, price){
-    var newProductsRef = productsRef.push();
-    newProductsRef.set({
-        productID: id,
-        productName: name,
-        category: category,
-        description: description,
-        imageUrl: image,
-        model3dUrl: model,
-        productPrice: price
-    })
-}
-function uploadFilesToStorage(){
     var imageUploadTask = imageStorageRef.put(selectedImageFile);
     imageUploadTask.on('state_changed', 
         function progress(snapshot){
@@ -90,10 +43,16 @@ function uploadFilesToStorage(){
         function complete() {
             storage.child('Product-2D-Images/' + imageFileName).getDownloadURL().then(function(url) {
                 imageUrl = url;
+                console.log(imageUrl)
               }).catch(function(error) {
                 // Handle any errors
               });
         });
+});
+modelFileButton.addEventListener('change', function(e){
+    selectedModelFile = e.target.files[0];
+    modelFileName = selectedModelFile.name + Date.now();
+    modelStorageRef = firebase.storage().ref("Product-3D-Models/" + modelFileName );
 
     var modelUploadTask = modelStorageRef.put(selectedModelFile);
     modelUploadTask.on('state_changed', 
@@ -111,4 +70,43 @@ function uploadFilesToStorage(){
                 // Handle any errors
               });
         });
+});
+
+
+//Reference to database
+var productsRef = firebase.database().ref('Products');
+var storage = firebase.storage().ref();
+
+//Main
+document.getElementById('contactForm').addEventListener('submit', submitForm);
+
+function submitForm(e){
+    e.preventDefault();
+
+    var id = getInputval("id");
+    var name = getInputval("name");
+    var category = getInputval("category");
+    var description = getInputval("description");
+    var image = imageUrl;
+    var model = modelUrl;
+    var price = parseFloat(getInputval("price"));
+    
+    saveProduct(id, name, category, description, image, model, price);
+
+}
+
+function getInputval(id){
+    return document.getElementById(id).value;
+}
+
+function saveProduct(id, name, category, description, image, model, price){
+    firebase.database().ref().child('Products').push().set({
+        productID: id,
+        productName: name,
+        category: category,
+        description: description,
+        imageUrl: image,
+        model3dUrl: model,
+        productPrice: price
+    })
 }
