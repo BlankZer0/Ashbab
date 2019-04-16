@@ -33,7 +33,7 @@ ext {
     support_version = '1.1.0-alpha04'
     material_version = '1.1.0-alpha05'
 
-    lifecycle_version  = '2.1.0-alpha03' // architecture components
+    lifecycle_version  = '2.1.0-alpha04' // architecture components
 
     // firebase
     firebase_core_version = "16.0.8"
