@@ -10,37 +10,79 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
+//Reference to database
+const productsRef = firebase.database().ref('Products');
+const storage = firebase.storage().ref();
 //Global variables
-var selectedImageFile;
-var selectedModelFile;
-var imageStorageRef;
-var modelStorageRef;
-var imageFileName;
-var modelFileName;
 var imageUrl;
 var modelUrl;
-var imageUploader = document.getElementById('imageUploader');
-var modelUploader = document.getElementById('modelUploader');
-var imageFileButton = document.getElementById('imageFile');
-var modelFileButton = document.getElementById('modelFile');
+const IMAGE_UPLOADER = document.getElementById('imageUploader');
+const MODEL_UPLOADER = document.getElementById('modelUploader');
+const IMAGE_FILE_BUTTON = document.getElementById('imageFile');
+const MODEL_FILE_BUTTON = document.getElementById('modelFile');
 
+IMAGE_FILE_BUTTON.addEventListener('change', function(e){
+    var selectedImageFile = e.target.files[0];
+    var imageFileName = selectedImageFile.name;
 
-imageFileButton.addEventListener('change', function(e){
-    selectedImageFile = e.target.files[0];
-    imageFileName = selectedImageFile.name + Date.now();
-    imageStorageRef = firebase.storage().ref("Product-2D-Images/" + imageFileName);
+    if(!validImage(imageFileName)){
+        alert(imageFileName + " Image must be in jpg format!");
+    }
+    else{
+        var imageFileName = selectedImageFile.name + Date.now();
+        var imageStorageRef = firebase.storage().ref("Product-2D-Images/" + imageFileName);
+        var imageUploadTask = imageStorageRef.put(selectedImageFile);
+        
+        imageUploadTask.on('state_changed', 
+        function progress(snapshot){
+            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            IMAGE_UPLOADER.value = percentage;
+        },
+        function error(err){
+            console.log("Error uploading the Product Image");
+        },
+        function complete() {
+            storage.child('Product-2D-Images/' + imageFileName).getDownloadURL().then(function(url) {
+                imageUrl = url;
+              }).catch(function(error) {
+                // Handle any errors
+              });
+        });
+    }
+
+    
 });
-modelFileButton.addEventListener('change', function(e){
-    selectedModelFile = e.target.files[0];
-    modelFileName = selectedModelFile.name + Date.now();
-    modelStorageRef = firebase.storage().ref("Product-3D-Models/" + modelFileName );
+
+MODEL_FILE_BUTTON.addEventListener('change', function(e){
+    var selectedModelFile = e.target.files[0];
+    var modelFileName = selectedModelFile.name;
+
+    if(!valid3DModel(modelFileName)){
+        alert(modelFileName + " Model must be in glb format!");
+    }
+    else{
+        var modelFileName = selectedModelFile.name + Date.now();
+        var modelStorageRef = firebase.storage().ref("Product-3D-Models/" + modelFileName );
+        var modelUploadTask = modelStorageRef.put(selectedModelFile);
+        modelUploadTask.on('state_changed', 
+        function progress(snapshot){
+            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            MODEL_UPLOADER.value = percentage;
+        },
+        function error(err){
+            console.log("Error uploading the Product Model");
+        },
+        function complete() {
+            storage.child('Product-3D-Models/' + modelFileName).getDownloadURL().then(function(url) {
+                modelUrl = url;
+              }).catch(function(error) {
+                // Handle any errors
+              });
+        });
+    }
+    
 });
 
-
-//Reference to database
-var productsRef = firebase.database().ref('Products');
-var storage = firebase.storage().ref();
 
 //Main
 document.getElementById('contactForm').addEventListener('submit', submitForm);
@@ -56,9 +98,14 @@ function submitForm(e){
     var model = modelUrl;
     var price = parseFloat(getInputval("price"));
 
-    uploadFilesToStorage();
-    saveProduct(id, name, category, description, image, model, price);
-
+    if(!validPrice(price)){
+        alert("Not a valid price");
+    }
+    else{
+        saveProduct(id, name, category, description, image, model, price);
+    }
+    
+    
 }
 
 function getInputval(id){
@@ -66,8 +113,7 @@ function getInputval(id){
 }
 
 function saveProduct(id, name, category, description, image, model, price){
-    var newProductsRef = productsRef.push();
-    newProductsRef.set({
+    firebase.database().ref().child('Products').push().set({
         productID: id,
         productName: name,
         category: category,
@@ -76,39 +122,4 @@ function saveProduct(id, name, category, description, image, model, price){
         model3dUrl: model,
         productPrice: price
     })
-}
-function uploadFilesToStorage(){
-    var imageUploadTask = imageStorageRef.put(selectedImageFile);
-    imageUploadTask.on('state_changed', 
-        function progress(snapshot){
-            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            imageUploader.value = percentage;
-        },
-        function error(err){
-            console.log("Error uploading the Product Image");
-        },
-        function complete() {
-            storage.child('Product-2D-Images/' + imageFileName).getDownloadURL().then(function(url) {
-                imageUrl = url;
-              }).catch(function(error) {
-                // Handle any errors
-              });
-        });
-
-    var modelUploadTask = modelStorageRef.put(selectedModelFile);
-    modelUploadTask.on('state_changed', 
-        function progress(snapshot){
-            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            modelUploader.value = percentage;
-        },
-        function error(err){
-            console.log("Error uploading the Product Model");
-        },
-        function complete() {
-            storage.child('Product-3D-Models/' + modelFileName).getDownloadURL().then(function(url) {
-                modelUrl = url;
-              }).catch(function(error) {
-                // Handle any errors
-              });
-        });
 }
