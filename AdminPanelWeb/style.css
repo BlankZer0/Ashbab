@@ -108,8 +108,10 @@ ul{
 /*Custom added*/
 .button{
   background:#c9e6ff;
-  border:0;
+  border:1px solid;
   text-transform: uppercase;
+  padding: 2px;
+  font-size: 15px;
 }
 
 .uploader{
@@ -117,3 +119,31 @@ ul{
   appearance: none;
   width: 50%;
 }
+
+
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #c9e6ff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.ul{
+  border: #485e74
+
+
+}
+
+
+
+.dropdown:hover .dropdown-content {display: block;}
