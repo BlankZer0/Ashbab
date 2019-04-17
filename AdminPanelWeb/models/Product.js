@@ -13,6 +13,5 @@ class product{
         this.image = image;
         this.model = model;
         this.price = price;
-        this.dimension = dimension;
     }
 }

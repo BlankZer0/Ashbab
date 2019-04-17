@@ -97,13 +97,12 @@ function submitForm(e){
     var image = imageUrl;
     var model = modelUrl;
     var price = parseFloat(getInputval("price"));
-    var dimension= getInputval("dinemsion");
 
     if(!validPrice(price)){
         alert("Not a valid price");
     }
     else{
-        saveProduct(id, name, category, description, image, model, price, dimension);
+        saveProduct(id, name, category, description, image, model, price);
     }
     
     
@@ -121,7 +120,6 @@ function saveProduct(id, name, category, description, image, model, price){
         description: description,
         imageUrl: image,
         model3dUrl: model,
-        productPrice: price,
-        productDimension: dimension
+        productPrice: price
     })
 }
