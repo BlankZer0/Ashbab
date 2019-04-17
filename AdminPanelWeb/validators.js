@@ -10,8 +10,9 @@ function validPrice(price){
 }
 
 function validImage(imageFileName){
-    var re = /.jpg$/;
-    if(re.test(imageFileName))
+    var jpgFormat = /.jpg$/;
+    var pngFormat = /.png$/;
+    if(jpgFormat.test(imageFileName) || pngFormat.test(imageFileName))
     {
         return true;
     }
@@ -21,8 +22,8 @@ function validImage(imageFileName){
 }
 
 function valid3DModel(modelFileName){
-    var re = /.glb$/;
-    if(re.test(modelFileName))
+    var glbFormat = /.glb$/;
+    if(glbFormat.test(modelFileName))
     {
         return true;
     }

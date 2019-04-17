@@ -26,7 +26,7 @@ IMAGE_FILE_BUTTON.addEventListener('change', function(e){
     var imageFileName = selectedImageFile.name;
 
     if(!validImage(imageFileName)){
-        alert(imageFileName + " Image must be in jpg format!");
+        alert(imageFileName + " Image must be in jpg or png format!");
     }
     else{
         var imageFileName = selectedImageFile.name + Date.now();
