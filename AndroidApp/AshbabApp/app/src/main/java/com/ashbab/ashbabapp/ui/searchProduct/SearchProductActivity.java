@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
+import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -118,14 +119,11 @@ public class SearchProductActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings_other)
+        if (item.getItemId() == R.id.action_sign_out_main)
         {
+            AuthUI.getInstance().signOut(this);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
