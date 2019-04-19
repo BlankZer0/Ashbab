@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Ashbab Admin Panel</title>
+        <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+        
+    <body>
+
+            <div class="container">
+                
+                <h1 class="brand" href="index"><span><img source= "logo " alt="logo">ASHBAB</span><br></span> Admin Panel</h1>
+                
+            </div>
+    
+            <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+            <script src="addProduct.js"></script>
+        
+        <div>
+            <ul class="ul">
+                 <li>   <div class="dropdown">
+										
+                            <button class="button"><b>Manage products</b></button>
+                            <div class="dropdown-content">
+                                <a href="addProduct">Add a product</a>
+                                <a href="editProduct">Edit a product</a>
+                                <a href="removeProduct">Remove a product</a>
+                                
+                            </div>
+                        
+                           
+                        </div>
+                 </li>
+                </br>
+                
+                <li>
+                        <button class="button" type="button" onclick="window.location.href='manageOrder'"><b>Manage Orders</b></button>
+                </li>
+                </br>
+                <li>
+                    <button class="button" type="button" onclick="window.location.href='viewDashboard'"><b>View dashboard</b></button>
+            </li>
+            </ul>    
+
+        </div>  
+    </body>
+</html>
