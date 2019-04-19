@@ -18,6 +18,22 @@ const IMAGE_UPLOADER = document.getElementById('imageUploader');
 const MODEL_UPLOADER = document.getElementById('modelUploader');
 const IMAGE_FILE_BUTTON = document.getElementById('imageFile');
 const MODEL_FILE_BUTTON = document.getElementById('modelFile');
+const SELECT_CATEGORIES = document.getElementById('category');
+
+//The drag down menu will be populated from Firebase Categories Node
+firebase.database().ref("Categories").on('value', (data)=>{
+    data.forEach(element => {
+        addOption(SELECT_CATEGORIES, element.val(), element.val());
+
+        //Allowing submit only after drag down menu is set
+        document.getElementById('contactForm').addEventListener('submit', submitForm);
+
+    });
+}, (err)=> {
+    console.log('Error getting categories from database!' + err);
+});
+
+
 
 IMAGE_FILE_BUTTON.addEventListener('change', function(e){
     var selectedImageFile = e.target.files[0];
@@ -82,9 +98,6 @@ MODEL_FILE_BUTTON.addEventListener('change', function(e){
 });
 
 
-//Main
-document.getElementById('contactForm').addEventListener('submit', submitForm);
-
 function submitForm(e){
     e.preventDefault();
     
@@ -103,8 +116,15 @@ function submitForm(e){
         saveProduct(id, name, category, description, image, model, price);
         alert("Product updated");
     }
-    
-    
+}
+
+
+
+addOption = function(selectbox, text, value) {
+    var optn = document.createElement("OPTION");
+    optn.text = text;
+    optn.value = value;
+    selectbox.options.add(optn);  
 }
 
 function getInputval(id){
