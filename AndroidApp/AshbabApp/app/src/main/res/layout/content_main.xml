@@ -19,7 +19,7 @@
         android:text="@string/title_newly_added" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_newly_added"
+        android:id="@+id/rv_newly_added_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/vertical_spacing"
@@ -27,5 +27,25 @@
         android:layout_marginTop="@dimen/horizontal_spacing"
         android:layout_marginBottom="@dimen/horizontal_spacing"
         android:layout_below="@id/title_newly_added" />
+
+    <!-- Empty view is only visible when the list has no items. -->
+    <TextView
+        style="@style/TextAppearance.AppText.Body1"
+        android:id="@+id/empty_view_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        tools:text="@string/text_loading_failed"/>
+
+
+    <!-- Loading indicator is only shown before the first load -->
+    <ProgressBar
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:id="@+id/loading_indicator_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

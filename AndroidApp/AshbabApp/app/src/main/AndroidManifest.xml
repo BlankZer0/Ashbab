@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ashbab.ashbabapp">
 
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Always needed for AR. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!--
  This tag indicates that this application requires ARCore. This results in the application
         only being visible in the Google Play Store on devices that support ARCore.
@@ -41,10 +42,10 @@
         </activity>
 
         <activity
-            android:name=".ui.productPage.ProductDetailsActivity"
+            android:name=".ui.productDetails.ProductDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".ui.productPage.ArCameraActivity" />
+        <activity android:name=".ui.productDetails.ArCameraActivity" />
 
         <activity
             android:name=".ui.searchProduct.SearchProductActivity"

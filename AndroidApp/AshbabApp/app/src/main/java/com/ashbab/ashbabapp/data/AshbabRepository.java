@@ -27,9 +27,9 @@ public class AshbabRepository
     private static final DatabaseReference PRODUCT_REF =
             FirebaseDatabase.getInstance().getReference().child("/Products");
 
-    private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(PRODUCT_REF);
+    private FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(PRODUCT_REF);
 
-    private final MediatorLiveData<Product> productLiveDataMain = new MediatorLiveData<>();
+    private MediatorLiveData<Product> productLiveDataMain = new MediatorLiveData<>();
 
     /**
      * Set up the MediatorLiveData to convert DataSnapshot objects into Product liveData
@@ -67,6 +67,14 @@ public class AshbabRepository
     public LiveData<Product> getLiveDataForHomeCards()
     {
         Log.v(LOG_TAG, PRODUCT_REF.toString());
+
+        InitializeData();
+        return productLiveDataMain;
+    }
+
+    public LiveData<Product> getLiveDataProduct(String key)
+    {
+        liveData = new FirebaseQueryLiveData(PRODUCT_REF.orderByKey().equalTo(key));
 
         InitializeData();
         return productLiveDataMain;

@@ -21,6 +21,7 @@
 
     <!-- Home appbar_items_main content -->
     <string name="title_newly_added">Newly Added</string>
+    <string name="text_loading_failed">Failed to load Data\nCheck your internet connection</string>
 
     <!-- Product Details Content -->
     <string name="taka_sign"> ৳ </string>

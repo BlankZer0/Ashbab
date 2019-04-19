@@ -33,6 +33,14 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
         query.keepSynced(true);
     }
 
+    public FirebaseQueryLiveData(Query query)
+    {
+        this.query = query;
+
+        // caches the data from firebase locally
+        query.keepSynced(true);
+    }
+
     private final Runnable removeListener = new Runnable()
     {
         @Override

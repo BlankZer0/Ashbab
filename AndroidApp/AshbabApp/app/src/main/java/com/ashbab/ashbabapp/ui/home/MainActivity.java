@@ -1,14 +1,20 @@
 package com.ashbab.ashbabapp.ui.home;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
 
-import com.ashbab.ashbabapp.ui.productPage.ProductDetailsActivity;
+import com.ashbab.ashbabapp.ui.productDetails.ProductDetailsActivity;
 import com.ashbab.ashbabapp.ui.searchProduct.SearchProductActivity;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -16,16 +22,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.util.ArrayList;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 /**
  * This is the Activity for the App home
@@ -36,7 +41,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Tag to be used for debugging
     private static final String LOG_TAG =  MainActivity.class.getSimpleName();
 
-    private MainProductAdapter mainProductAdapter;
+    private static final DatabaseReference PRODUCT_REF =
+            FirebaseDatabase.getInstance().getReference().child("/Products");
+
+    private MainRecyclerAdapter mainRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,74 +67,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Create a list to hold all the products to be shown in the recycler view
-        ArrayList<Product> gridProducts = new ArrayList<>();
-
-        // Create a list of products that holds every attribute of the product
-        ArrayList<Product> completeProducts = new ArrayList<>();
-
-        RecyclerView recyclerView = findViewById(R.id.rv_newly_added);
-        // improves performance because changes  that changes in content
-        // do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
+        RecyclerView recyclerView = findViewById(R.id.rv_newly_added_main);
 
         // The items of the recycler view will be shown in grids
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
+        FirebaseRecyclerOptions<Product> options =
+                new FirebaseRecyclerOptions.Builder<Product>()
+                        .setQuery(PRODUCT_REF, Product.class)
+                        .setLifecycleOwner(this)
+                        .build();
+
+        mainRecyclerAdapter = new MainRecyclerAdapter(options);
         // specify the adapter to populate the recyclerView
-        mainProductAdapter = new MainProductAdapter(gridProducts);
-        recyclerView.setAdapter(mainProductAdapter);
-
-        // Selects the viewModel to fetch the data needed for the activity
-        // The data feed to the activity are Live Data that automatically updates the UI on data change
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        LiveData<Product> liveData = viewModel.getProductLiveDataMain();
-        // Listen data change forever
-        liveData.observeForever(product ->
-        {
-            Log.v(LOG_TAG, "Data change detected");
-
-            if (product != null)
-            {
-                // updates the UI here
-                String productName = product.getProductName();
-                float productPrice = product.getProductPrice();
-                String imageUrl = product.getImageUrl();
-
-                completeProducts.add(product);
-                gridProducts.add(new Product(productName, productPrice, imageUrl));
-                Log.v(LOG_TAG, productName + " has been added to the list");
-
-                mainProductAdapter.notifyDataSetChanged();
-            }
-        });
+        recyclerView.setAdapter(mainRecyclerAdapter);
 
         // Attaches an item listener to the recycler view items
-        mainProductAdapter.setOnItemClickListener((view, position) ->
+        mainRecyclerAdapter.setOnItemClickListener((view, position) ->
         {
             Log.v(LOG_TAG, "The position of the selected item: " + position);
-            // Stop listening to data change before switching to another activity
-            liveData.removeObservers(this);
 
-            // Get the product from the user selected location
-            Product parceledProduct = completeProducts.get(position);
-
-            Log.v(LOG_TAG, parceledProduct.toString());
+            String key = mainRecyclerAdapter.getRef(position).getKey();
+            Log.v(LOG_TAG, "The key is: " + key);
 
             // Open the product details activity and show details of the selected product
-            startActivity(ProductDetailsActivity.buildIntent(this, parceledProduct));
+            startActivity(ProductDetailsActivity.buildIntent(this, key));
         });
 
         TextInputEditText searchProduct = findViewById(R.id.search_product_main);
+
 
         // Start the searchProductActivity whenever the searchProduct toolbar is clicked
         searchProduct.setOnClickListener(view ->
                 {
                     Log.v(LOG_TAG, "Search Product Clicked");
-                    liveData.removeObservers(this);
+                    //liveData.removeObservers(this);
                     startActivity(SearchProductActivity.buildIntent(this));
                 });
+
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        // If there is a network connection, fetch data
+        if (networkInfo == null || !networkInfo.isConnected())
+        {
+            // Otherwise, display error
+            // First, hide loading indicator so error message will be visible
+            ProgressBar loadingIndicator = findViewById(R.id.loading_indicator_main);
+            loadingIndicator.setVisibility(View.GONE);
+
+            // Update empty state with no connection error message
+            TextView emptyStateText = findViewById(R.id.empty_view_text);
+            emptyStateText.setText(R.string.text_loading_failed);
+        }
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.v(LOG_TAG, "Activity Started");
     }
 
     /**

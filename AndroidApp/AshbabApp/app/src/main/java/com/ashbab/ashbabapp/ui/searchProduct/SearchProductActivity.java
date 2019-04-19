@@ -1,11 +1,12 @@
 package com.ashbab.ashbabapp.ui.searchProduct;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +16,10 @@ import android.view.MenuItem;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
-import com.ashbab.ashbabapp.ui.home.MainProductAdapter;
-
-import java.util.ArrayList;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 
 public class SearchProductActivity extends AppCompatActivity
@@ -25,7 +27,12 @@ public class SearchProductActivity extends AppCompatActivity
     // Tag to be used for debugging
     private static final String LOG_TAG =  SearchProductActivity.class.getSimpleName();
 
-    SearchProductAdapter searchProductAdapter;
+    SearchRecyclerAdapter searchRecyclerAdapter;
+
+    private static final DatabaseReference PRODUCT_REF =
+            FirebaseDatabase.getInstance().getReference().child("/Products");
+
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,24 +49,21 @@ public class SearchProductActivity extends AppCompatActivity
         toolbar.setNavigationOnClickListener((view) ->
                 onBackPressed());
 
-        // Create a list to hold all the products to be shown in the recycler view
-        ArrayList<Product> gridProducts = new ArrayList<>();
-
-        // Create a list of products that holds every attribute of the product
-        ArrayList<Product> completeProducts = new ArrayList<>();
-
-        RecyclerView recyclerView = findViewById(R.id.rv_search_results);
-        // improves performance because changes  that changes in content
-        // do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
+        recyclerView = findViewById(R.id.rv_search_results);
 
         // The items of the recycler view will be shown in grids
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        FirebaseRecyclerOptions<Product> options =
+                new FirebaseRecyclerOptions.Builder<Product>()
+                        .setQuery(PRODUCT_REF, Product.class)
+                        .setLifecycleOwner(SearchProductActivity.this)
+                        .build();
+
+        searchRecyclerAdapter = new SearchRecyclerAdapter(options);
         // specify the adapter to populate the recyclerView
-        searchProductAdapter = new SearchProductAdapter(gridProducts);
-        recyclerView.setAdapter(searchProductAdapter);
+        recyclerView.setAdapter(searchRecyclerAdapter);
     }
 
     /**
@@ -69,6 +73,42 @@ public class SearchProductActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.appbar_items_other, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search_other).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                Query firebaseSearchQuery = PRODUCT_REF.orderByChild("productName").startAt(query).endAt(query + "\uf8ff");
+
+                Log.v(LOG_TAG, "Search Parameter is: " + query);
+
+                FirebaseRecyclerOptions<Product> options =
+                        new FirebaseRecyclerOptions.Builder<Product>()
+                                .setQuery(firebaseSearchQuery, Product.class)
+                                .setLifecycleOwner(SearchProductActivity.this)
+                                .build();
+
+                searchRecyclerAdapter = new SearchRecyclerAdapter(options);
+                // specify the adapter to populate the recyclerView
+                recyclerView.setAdapter(searchRecyclerAdapter);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                return false;
+            }
+        });
         return true;
     }
 
