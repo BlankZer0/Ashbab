@@ -38,7 +38,9 @@ ext {
     // firebase
     firebase_core_version = "16.0.8"
     firebase_database_version = '16.1.0'
+    firebase_auth_version = '16.2.1'
     firebase_ui_version = '4.3.2'
+    facebook_login_version = '4.42.0'
 
     glide_version = '4.9.0' // Image loading and caching
 

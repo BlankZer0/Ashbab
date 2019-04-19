@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_settings_other"
+        android:id="@+id/action_sigh_out_other"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/text_action_sign_out"
         app:showAsAction="never" />
 
     <item

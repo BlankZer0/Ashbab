@@ -1,6 +1,7 @@
 package com.ashbab.ashbabapp.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -10,13 +11,17 @@ import com.ashbab.ashbabapp.data.model.Product;
 
 import com.ashbab.ashbabapp.ui.productDetails.ProductDetailsActivity;
 import com.ashbab.ashbabapp.ui.searchProduct.SearchProductActivity;
+import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,6 +36,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This is the Activity for the App home
@@ -44,7 +53,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final DatabaseReference PRODUCT_REF =
             FirebaseDatabase.getInstance().getReference().child("/Products");
 
-    private MainRecyclerAdapter mainRecyclerAdapter;
+    private static final int RC_SIGN_IN = 1;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth.AuthStateListener authStateListener;
+
+    // Choose authentication providers
+    private final List<AuthUI.IdpConfig> providers = Arrays.asList(
+            new AuthUI.IdpConfig.EmailBuilder().build(),
+            new AuthUI.IdpConfig.GoogleBuilder().build(),
+            new AuthUI.IdpConfig.FacebookBuilder().build());
+
+    MainRecyclerAdapter mainRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -97,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TextInputEditText searchProduct = findViewById(R.id.search_product_main);
 
-
         // Start the searchProductActivity whenever the searchProduct toolbar is clicked
         searchProduct.setOnClickListener(view ->
                 {
@@ -106,30 +124,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(SearchProductActivity.buildIntent(this));
                 });
 
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        checkInternetConnectivity();
 
-        // Get details on the currently active default data network
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-        // If there is a network connection, fetch data
-        if (networkInfo == null || !networkInfo.isConnected())
+        authStateListener = firebaseAuth ->
         {
-            // Otherwise, display error
-            // First, hide loading indicator so error message will be visible
-            ProgressBar loadingIndicator = findViewById(R.id.loading_indicator_main);
-            loadingIndicator.setVisibility(View.GONE);
+            FirebaseUser user = firebaseAuth.getCurrentUser();
 
-            // Update empty state with no connection error message
-            TextView emptyStateText = findViewById(R.id.empty_view_text);
-            emptyStateText.setText(R.string.text_loading_failed);
-        }
+            if (user == null)
+            {
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setAvailableProviders(providers)
+                                .setTheme(R.style.LoginTheme)
+                                .build(),
+                        RC_SIGN_IN);
+            }
+        };
     }
 
     @Override
-    protected void onStart()
+    protected void onResume()
     {
-        super.onStart();
-        Log.v(LOG_TAG, "Activity Started");
+        super.onResume();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        if (authStateListener != null)
+            firebaseAuth.removeAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // If the user presses the back button on the login screen,
+        // the sign-in process will be cancelled and the user will be able to exit the app
+        if (requestCode == RC_SIGN_IN)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                Toast.makeText(MainActivity.this, R.string.text_signed_in, Toast.LENGTH_SHORT).show();
+            }
+            else if (resultCode == RESULT_CANCELED)
+            {
+                Toast.makeText(MainActivity.this, R.string.text_sign_in_cancelled, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     /**
@@ -166,14 +214,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings_main)
+        if (item.getItemId() == R.id.action_sign_out_main)
         {
+            AuthUI.getInstance().signOut(MainActivity.this);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -202,5 +247,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void checkInternetConnectivity()
+    {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        // If there is a network connection, fetch data
+        if (networkInfo == null || !networkInfo.isConnected())
+        {
+            // Otherwise, display error
+            // First, hide loading indicator so error message will be visible
+            ProgressBar loadingIndicator = findViewById(R.id.loading_indicator_main);
+            loadingIndicator.setVisibility(View.GONE);
+
+            // Update empty state with no connection error message
+            TextView emptyStateText = findViewById(R.id.empty_view_text);
+            emptyStateText.setText(R.string.text_loading_failed);
+        }
     }
 }

@@ -1,11 +1,8 @@
 package com.ashbab.ashbabapp.data.model;
 
-import org.parceler.Parcel;
-
 /**
  * The Java Bean class of a product
  */
-@Parcel
 public class Product
 {
     private String productID;
