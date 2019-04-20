@@ -33,8 +33,6 @@ firebase.database().ref("Categories").on('value', (data)=>{
     console.log('Error getting categories from database!' + err);
 });
 
-
-
 IMAGE_FILE_BUTTON.addEventListener('change', function(e){
     var selectedImageFile = e.target.files[0];
     var imageFileName = selectedImageFile.name;

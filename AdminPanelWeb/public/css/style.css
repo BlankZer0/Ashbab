@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+.logo {
+  height: 100px;
+  width: 100px;
+}
+
+
 body{
   background:#92bde7;
   color:#485e74;
@@ -106,12 +112,36 @@ ul{
 }
 
 /*Custom added*/
-.button{
-  background:#c9e6ff;
-  border:1px solid;
+
+a.button{
+  color: #FFF;
+  text-decoration: inherit;
+  display: block;
+  font-size: 1.17em;
+  font-weight: bold;
   text-transform: uppercase;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:#2577be;
+  border:1px solid;
   padding: 2px;
-  font-size: 15px;
+  text-align: center;
+  
+}
+
+a.button:hover, .button:focus{
+  color: #000;
+  text-decoration: inherit;
+  color: inherit;
+  text-decoration: inherit;
+  display: block;
+  font-size: 1.17em;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:#dbe5ee;
+  border:1px solid;
+  padding: 2px;
+  text-align: center;
 }
 
 .uploader{
@@ -119,8 +149,6 @@ ul{
   appearance: none;
   width: 50%;
 }
-
-
 
 .dropdown-content {
   display: none;
@@ -140,8 +168,6 @@ ul{
 
 .ul{
   border: #485e74
-
-
 }
 
 
