@@ -99,13 +99,14 @@ MODEL_FILE_BUTTON.addEventListener('change', function(e){
 function submitForm(e){
     e.preventDefault();
     
-    var id = getInputval("id");
     var name = getInputval("name");
     var category = getInputval("category");
     var description = getInputval("description");
     var image = imageUrl;
     var model = modelUrl;
     var price = parseFloat(getInputval("price"));
+    //The ID will be unique by using the timestamp
+    var id = category + Date.now();
 
     if(!validPrice(price)){
         alert("Not a valid price");
