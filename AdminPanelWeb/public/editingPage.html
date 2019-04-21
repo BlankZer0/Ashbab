@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Ashbab Admin Panel</title>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styleTable.css">
+</head>
+
+<body>
+    <button class="button" onclick="window.location.href='index.html'">Main Page</button>
+    <div class="container">
+
+        <h1 class="brand" onclick="window.location.href='index.html'">
+            <span><img class="logo" src="images/AshbabLogo.png" alt="logo">ASHBAB</span>
+            <br>Admin Panel</h1>
+    </div>
+    <div class="container">
+       
+        <div class="wrapper">
+            <div class="company-info">
+                <h3>EDIT INFORMATION</h3>
+            </div>
+
+            <div class="contact" id="contactForm">
+                <h3>PRODUCT INFORMATION</h3>
+                <form>
+                        <table class="data-table">
+                       
+                                <tbody>
+                                    <tr>
+                                        <td>Product ID</td>
+                                                <td >   </td>
+                                                
+                                     </tr>
+                                    <tr>
+                                        <td>Product Name</td>
+                                        <td>   </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                            <td>Category</td>
+                                            <td>   </td>
+                                            
+                                     </tr>
+                                     <tr>
+                                            <td>Details</td>
+                                            <td>  </td>
+                                            
+                                        </tr>
+                                        <tr>
+                                                <td>Price</td>
+                                                <td>  </td>
+                                                
+                                        </tr>
+        
+                                    
+                                    
+                                </tbody>
+                            </table>
+                        </br>
+
+
+                    <a class="button" >Update</a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <script src="./addProduct.js"></script>
+    <script src="./validators.js"></script>
+</body>
+
+</html>

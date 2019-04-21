@@ -18,7 +18,7 @@
 
         <div class="container">
 
-            <h1 class="brand" href="index.html">
+            <h1 class="brand" onclick="window.location.href='index.html'">
                 <span><img class="logo" src="images/AshbabLogo.png" alt="logo">ASHBAB</span>
                 <br>Admin Panel</h1>
         </div>
@@ -32,12 +32,13 @@
     
                 <div class="contact" id="contactForm">
                     <h3>PRODUCT INFORMATION</h3>
+                    <form>
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th>date</th>
                                 <th>order ID</th>
-                                <th>Id</th>
+                                <th>Product Id</th>
                                 <th>name</th>
                                 <th class="text-right">price</th>
                                 <th class="text-right">quantity</th>
@@ -55,8 +56,10 @@
                                 <td class="text-right"></td>
                                 <td class="text-right"></td>
                                 <td> 
-                                    <button class="button" onclick="window.location.href='customerDetails.html'">Accept</button> 
-                                    <button class="button" onclick="alart()">Reject</button>
+                                    
+                                   
+                                    <a class="button" href="customerDetails.html">Edit</a>
+                                    <a class="button" >Remove</a>
                                     
                                 </td>
                             </tr>

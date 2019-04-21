@@ -6,12 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Edit a product</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styleTable.css">
 </head>
 <body> 
         <button class="button" onclick="window.location.href='index.html'">Main Page</button>
         <div class="container">
 
-                <h1 class="brand" href="index.html">
+                <h1 class="brand" onclick="window.location.href='index.html'">
                     <span><img class="logo" src="images/AshbabLogo.png" alt="logo">ASHBAB</span>
                     <br>Admin Panel</h1>
             </div>
@@ -19,11 +20,42 @@
        
         <div class="wrapper">
             <div class="company-info">
-                <h3>Admin Panel</h3>
+                <h3>EDIT PRODUCT</h3>
             </div>
 
             <div class="contact" id="contactForm">
-                <h3>Product Info</h3>
+                <h3>PRODUCT INFORMATION</h3>
+                <form>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Product Id</th>
+                            <th> Name</th>
+                            <th>Categoty</th>
+                            <th>Details</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">Edit</th>
+                            <th class="text-right">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"></td>
+                            <td> 
+                                <a class="button" href="editingPage.html">Edit</a>
+                            </td>
+                            <td> 
+                                <a class="button" >Remove</a>
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
                 
             </div>
         </div>
