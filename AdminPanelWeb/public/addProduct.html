@@ -9,13 +9,18 @@
 </head>
 
 <body>
-    <button class="button" onclick="window.location.href='index.html'">Main Page</button>
-
     <div class="container">
-        <h1 class="brand"><span>ASHBAB</span> Add a Product</h1>
+        <h1 class="brand" href="index.html">
+            <span><img class="logo" src="images/AshbabLogo.png" alt="logo" onclick="window.location.href='index.html'">
+                ASHBAB
+            </span>
+            <h1 class="brand">Admin Panel</h1>
+        </h1>
+    </div>
+    <div class="container">
         <div class="wrapper">
             <div class="company-info">
-                <h3>Admin Panel</h3>
+                <h3>Add a product</h3>
             </div>
 
             <div class="contact" id="contactForm">
@@ -34,6 +39,10 @@
                         <input type="text" name="description" id="description">
                     </p>
                     <p>
+                        <label>Price</label>
+                        <input type="text" name="price" id="price">
+                    </p>
+                    <p>
                         <label>Image</label>
                         <input id="imageFile" type="file" name="image" id="image" />
                         <progress id="imageUploader" class="uploader" value="0" max="100" id="uploader">0%</progress>
@@ -43,11 +52,6 @@
                         <input id="modelFile" type="file" name="model" id="model">
                         <progress id="modelUploader" class="uploader" value="0" max="100" id="uploader">0%</progress>
                     </p>
-                    <p>
-                        <label>Price</label>
-                        <input type="text" name="price" id="price">
-                    </p>
-
 
                     <p class="full">
                         <button>Submit</button>
