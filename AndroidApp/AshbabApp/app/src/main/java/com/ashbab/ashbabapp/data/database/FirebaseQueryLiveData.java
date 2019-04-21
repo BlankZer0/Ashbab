@@ -7,6 +7,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.annotations.Nullable;
 
@@ -18,7 +19,7 @@ import androidx.lifecycle.LiveData;
  */
 public class FirebaseQueryLiveData extends LiveData<DataSnapshot>
 {
-    private static final String LOG_TAG = "FirebaseQueryLiveData";
+    private static final String LOG_TAG = FirebaseQueryLiveData.class.getSimpleName();
 
     private final Query query;
     private final ChildEventListener myChildEventListener = new MyChildEventListener();

@@ -33,6 +33,8 @@ public class SearchProductActivity extends AppCompatActivity
     private static final DatabaseReference PRODUCT_REF =
             FirebaseDatabase.getInstance().getReference().child("/Products");
 
+    private static final String SEARCH_KEY = "productName";
+
     private RecyclerView recyclerView;
 
     @Override
@@ -87,7 +89,7 @@ public class SearchProductActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                Query firebaseSearchQuery = PRODUCT_REF.orderByChild("productName").startAt(query).endAt(query + "\uf8ff");
+                Query firebaseSearchQuery = PRODUCT_REF.orderByChild(SEARCH_KEY).startAt(query).endAt(query + "\uf8ff");
 
                 Log.v(LOG_TAG, "Search Parameter is: " + query);
 

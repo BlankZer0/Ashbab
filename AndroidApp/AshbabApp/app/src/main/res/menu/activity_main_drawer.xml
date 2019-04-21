@@ -4,21 +4,8 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_menu_gallery"
-        android:title="@string/category_home"/>
-
-    <item android:title="@string/category_title">
-        <menu>
-            <item
-                android:id="@+id/nav_chair"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/category_chair" />
-            <item
-                android:id="@+id/nav_table"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/category_table" />
-        </menu>
-    </item>
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/round_account_circle_24"
+        android:title="@string/category_profile"/>
 
 </menu>

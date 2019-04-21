@@ -20,14 +20,14 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
  * The MainRecyclerAdapter binds a Firebase Query to a RecyclerView.
  * When data is added, removed, or changed these updates are automatically applied to the UI.
  */
-public class MainRecyclerAdapter extends FirebaseRecyclerAdapter<Product, MainRecyclerAdapter.ProductViewHolder>
+class MainRecyclerAdapter extends FirebaseRecyclerAdapter<Product, MainRecyclerAdapter.ProductViewHolder>
 {
     private static final String LOG_TAG = MainRecyclerAdapter.class.getSimpleName();
 
     // Define listener member variable
     private static OnItemClickListener listener;
     // Define the listener interface
-    public interface OnItemClickListener
+    interface OnItemClickListener
     {
         void onItemClick(View itemView, int position);
     }
@@ -102,7 +102,7 @@ public class MainRecyclerAdapter extends FirebaseRecyclerAdapter<Product, MainRe
         }
         else
         {
-            holder.productImageView.setImageResource(R.mipmap.ic_launcher);
+            holder.productImageView.setImageResource(R.mipmap.ashbab_icon);
         }
     }
 }
