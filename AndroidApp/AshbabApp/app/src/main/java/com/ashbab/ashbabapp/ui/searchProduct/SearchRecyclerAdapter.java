@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
-import com.ashbab.ashbabapp.ui.home.MainRecyclerAdapter;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -21,14 +20,14 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
  * The MainRecyclerAdapter binds a Firebase Query to a RecyclerView.
  * When data is added, removed, or changed these updates are automatically applied to the UI.
  */
-public class SearchRecyclerAdapter extends FirebaseRecyclerAdapter<Product, SearchRecyclerAdapter.ProductViewHolder>
+class SearchRecyclerAdapter extends FirebaseRecyclerAdapter<Product, SearchRecyclerAdapter.ProductViewHolder>
 {
-    private static final String LOG_TAG = MainRecyclerAdapter.class.getSimpleName();
+    private static final String LOG_TAG = SearchRecyclerAdapter.class.getSimpleName();
 
     // Define listener member variable
     private static OnItemClickListener listener;
     // Define the listener interface
-    public interface OnItemClickListener
+    interface OnItemClickListener
     {
         void onItemClick(View itemView, int position);
     }
@@ -103,7 +102,7 @@ public class SearchRecyclerAdapter extends FirebaseRecyclerAdapter<Product, Sear
         }
         else
         {
-            holder.productImageView.setImageResource(R.mipmap.ic_launcher);
+            holder.productImageView.setImageResource(R.mipmap.ashbab_icon);
         }
     }
 }

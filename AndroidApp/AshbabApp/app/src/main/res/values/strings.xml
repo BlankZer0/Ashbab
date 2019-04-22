@@ -19,7 +19,7 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <!-- Drawer Items -->
-    <string name="category_home">Home</string>
+    <string name="category_profile">Profile</string>
     <string name="category_title">Categories</string>
     <string name="category_chair">Chair</string>
     <string name="category_table">Table</string>
@@ -36,12 +36,21 @@
     <string name="title_category">Category: </string>
     <string name="fab_buy">Buy Product</string>
 
+    <!-- User Profile Content -->
+    <string name="fab_save">Save</string>
+    <string name="text_name">Name</string>
+    <string name="text_name_hint">John Snow</string>
+    <string name="text_address">Address</string>
+    <string name="text_address_hint">North South University, Bashundhara R/A</string>
+    <string name="text_email">Email</string>
+
     <!-- Search Results Content -->
     <string name="title_search_results"> Search Results </string>
 
     <!-- Default Values -->
     <string name="default_home_card_name">Sample Chair</string>
     <string name="default_home_card_price">1250.50</string>
+    <string name="default_email">example@ashbab.com</string>
     <string name="default_category_tag">Chair</string>
     <string name="default_description">Comfy and lightweight so it’s easy to move. The castors have a handy brake mechanism that keeps the chair in place when you stand up, and releases when you sit down. Adjust the height and angle of this chair so your work day feels comfortable. The mesh backrest lets air through so you keep cool even when the workload rises. Built to outlast years of ups and downs.</string>
 

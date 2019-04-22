@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ashbab.ashbabapp.data.database.FirebaseQueryLiveData;
 import com.ashbab.ashbabapp.data.model.Product;
+import com.ashbab.ashbabapp.data.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -12,7 +13,6 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
@@ -27,16 +27,26 @@ public class AshbabRepository
     private static final DatabaseReference PRODUCT_REF =
             FirebaseDatabase.getInstance().getReference().child("/Products");
 
-    private FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(PRODUCT_REF);
+    private static final DatabaseReference CATEGORY_REF =
+            FirebaseDatabase.getInstance().getReference().child("/Categories");
 
-    private MediatorLiveData<Product> productLiveDataMain = new MediatorLiveData<>();
+    private static final DatabaseReference USER_REF =
+            FirebaseDatabase.getInstance().getReference().child("/Users");
+
+    private FirebaseQueryLiveData productLiveData = new FirebaseQueryLiveData(PRODUCT_REF);
+    private FirebaseQueryLiveData categoryLiveData = new FirebaseQueryLiveData(CATEGORY_REF);
+    private FirebaseQueryLiveData userLiveData = new FirebaseQueryLiveData(USER_REF);
+
+    private MediatorLiveData<Product> productMediatorLiveData = new MediatorLiveData<>();
+    private MediatorLiveData<String> categoryMediatorLiveData = new MediatorLiveData<>();
+    private MediatorLiveData<User> userMediatorLiveData = new MediatorLiveData<>();
 
     /**
-     * Set up the MediatorLiveData to convert DataSnapshot objects into Product liveData
+     * Set up the MediatorLiveData to convert DataSnapshot objects into Product productLiveData
      */
-    private void InitializeData()
+    private void InitializeProductData()
     {
-        productLiveDataMain.addSource(liveData, (DataSnapshot dataSnapshot) ->
+        productMediatorLiveData.addSource(productLiveData, (DataSnapshot dataSnapshot) ->
         {
             if (dataSnapshot != null)
             {
@@ -47,36 +57,96 @@ public class AshbabRepository
                 executorService.execute(() ->
                 {
                     Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.getValue(Product.class)).getProductName() + " has been found");
-                    // Post value is because it's thread safe
-                    productLiveDataMain.postValue(dataSnapshot.getValue(Product.class));
+                    // Post value is used because it's thread safe
+                    productMediatorLiveData.postValue(dataSnapshot.getValue(Product.class));
                 });
             }
             else
             {
                 Log.v(LOG_TAG, "Data snapshot is null");
 
-                productLiveDataMain.setValue(null);
+                productMediatorLiveData.setValue(null);
+            }
+        });
+    }
+
+    private void getCategoryFromFirebase()
+    {
+        categoryMediatorLiveData.addSource(categoryLiveData, (DataSnapshot dataSnapshot) ->
+        {
+            if (dataSnapshot != null)
+            {
+                Log.v(LOG_TAG, "Data snapshot is not null");
+
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+                executorService.execute(() ->
+                {
+                    Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.getValue(String.class)) + " has been found");
+                    // Post value is used because it's thread safe
+                    categoryMediatorLiveData.postValue(dataSnapshot.getValue(String.class));
+                });
+            }
+            else
+            {
+                Log.v(LOG_TAG, "Data snapshot is null");
+
+                categoryMediatorLiveData.setValue(null);
             }
         });
     }
 
     /**
-     * The Main Activity viewModel will collect it's data by calling this method
+     * Set up the MediatorLiveData to convert DataSnapshot objects into Product productLiveData
      */
-    @NonNull
-    public LiveData<Product> getLiveDataForHomeCards()
+    private void InitializeUserData()
     {
-        Log.v(LOG_TAG, PRODUCT_REF.toString());
+        userMediatorLiveData.addSource(userLiveData, (DataSnapshot dataSnapshot) ->
+        {
+            if (dataSnapshot != null)
+            {
+                Log.v(LOG_TAG, "Data snapshot is not null");
 
-        InitializeData();
-        return productLiveDataMain;
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+                executorService.execute(() ->
+                {
+                    Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.getValue(User.class)).getUserEmail() + " has been found");
+                    // Post value is used because it's thread safe
+                    userMediatorLiveData.postValue(dataSnapshot.getValue(User.class));
+                });
+            }
+            else
+            {
+                Log.v(LOG_TAG, "Data snapshot is null");
+
+                userMediatorLiveData.setValue(null);
+            }
+        });
     }
 
+    /**
+     * The ProductDetails viewModel will collect it's data by calling this method
+     */
     public LiveData<Product> getLiveDataProduct(String key)
     {
-        liveData = new FirebaseQueryLiveData(PRODUCT_REF.orderByKey().equalTo(key));
+        productLiveData = new FirebaseQueryLiveData(PRODUCT_REF.orderByKey().equalTo(key));
 
-        InitializeData();
-        return productLiveDataMain;
+        InitializeProductData();
+        return productMediatorLiveData;
+    }
+
+    public LiveData<String> getLiveDataCategory()
+    {
+        getCategoryFromFirebase();
+        return categoryMediatorLiveData;
+    }
+
+    public LiveData<User> getLiveDataUser(String key)
+    {
+        userLiveData = new FirebaseQueryLiveData(USER_REF.orderByKey().equalTo(key));
+
+        InitializeUserData();
+        return userMediatorLiveData;
     }
 }

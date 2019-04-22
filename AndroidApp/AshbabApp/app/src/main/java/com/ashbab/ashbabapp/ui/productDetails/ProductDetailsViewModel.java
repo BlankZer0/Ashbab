@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 /**
- * The viewModel class for the Main Activity that feed the data to the activity
+ * The viewModel class for the Product Details Activity that feed the data to the activity
  * All the data of this class are lifecycle aware
  */
 public class ProductDetailsViewModel extends ViewModel

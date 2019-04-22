@@ -9,14 +9,18 @@ import android.os.Bundle;
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
 
+import com.ashbab.ashbabapp.data.model.User;
 import com.ashbab.ashbabapp.ui.productDetails.ProductDetailsActivity;
 import com.ashbab.ashbabapp.ui.searchProduct.SearchProductActivity;
+import com.ashbab.ashbabapp.ui.userProfile.UserProfileActivity;
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,19 +31,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This is the Activity for the App home
@@ -48,10 +57,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     // Tag to be used for debugging
-    private static final String LOG_TAG =  MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private static final DatabaseReference PRODUCT_REF =
             FirebaseDatabase.getInstance().getReference().child("/Products");
+
+    private static final DatabaseReference USER_REF =
+            FirebaseDatabase.getInstance().getReference().child("/Users");
 
     private static final int RC_SIGN_IN = 1;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -64,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new AuthUI.IdpConfig.FacebookBuilder().build());
 
     MainRecyclerAdapter mainRecyclerAdapter;
+    SubMenu subMenu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,77 +85,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // set the modified toolbar as the action bar
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
+        // Set the Toolbar, AppDrawer and the Navigation Bar
+        setDrawerNavigationAndToolbar();
 
-        // Creates a drawer (Hamburger menu) and and set toggle options
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        // Populate the recycler View with recyclerView Adapter Products
+        populateRecyclerView();
 
-        // Attaches an Item Selected listener with app drawer's navigation items
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        setUpSearchBar();
 
-        RecyclerView recyclerView = findViewById(R.id.rv_newly_added_main);
-
-        // The items of the recycler view will be shown in grids
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(layoutManager);
-
-        FirebaseRecyclerOptions<Product> options =
-                new FirebaseRecyclerOptions.Builder<Product>()
-                        .setQuery(PRODUCT_REF, Product.class)
-                        .setLifecycleOwner(this)
-                        .build();
-
-        mainRecyclerAdapter = new MainRecyclerAdapter(options);
-        // specify the adapter to populate the recyclerView
-        recyclerView.setAdapter(mainRecyclerAdapter);
-
-        // Attaches an item listener to the recycler view items
-        mainRecyclerAdapter.setOnItemClickListener((view, position) ->
-        {
-            Log.v(LOG_TAG, "The position of the selected item: " + position);
-
-            String key = mainRecyclerAdapter.getRef(position).getKey();
-            Log.v(LOG_TAG, "The key is: " + key);
-
-            // Open the product details activity and show details of the selected product
-            startActivity(ProductDetailsActivity.buildIntent(this, key));
-        });
-
-        TextInputEditText searchProduct = findViewById(R.id.search_product_main);
-
-        // Start the searchProductActivity whenever the searchProduct toolbar is clicked
-        searchProduct.setOnClickListener(view ->
-                {
-                    Log.v(LOG_TAG, "Search Product Clicked");
-                    //liveData.removeObservers(this);
-                    startActivity(SearchProductActivity.buildIntent(this));
-                });
-
+        // Check whether or not the device is connected to the internet
         checkInternetConnectivity();
 
-        authStateListener = firebaseAuth ->
-        {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
+        // Check whether or not the user have signed in
+        listenForAuthentication();
 
-            if (user == null)
+        // Selects the viewModel to fetch the data needed for the activity
+        // The data feed to the activity are Live Data that automatically updates the UI on data change
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        LiveData<String> liveData = viewModel.getCategoryLiveData();
+        // Listen data change forever
+        liveData.observeForever(category ->
+        {
+            Log.v(LOG_TAG, "Data change detected");
+
+            if (category != null)
             {
-                startActivityForResult(
-                        AuthUI.getInstance()
-                                .createSignInIntentBuilder()
-                                .setIsSmartLockEnabled(false)
-                                .setAvailableProviders(providers)
-                                .setTheme(R.style.LoginTheme)
-                                .build(),
-                        RC_SIGN_IN);
+                Log.v(LOG_TAG, "Category Found: " + category);
+
+                subMenu.add(category);
             }
-        };
+        });
     }
 
     @Override
@@ -191,8 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else
+        } else
         {
             super.onBackPressed();
         }
@@ -225,24 +198,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Handle item clicks of the navigation menu
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
         int id = item.getItemId();
 
-        if (id == R.id.nav_home)
+        if (id == R.id.nav_profile)
         {
-            // TODO: Handle Home button click action
+            startActivity(UserProfileActivity.buildIntent(this));
         }
-        else if (id == R.id.nav_chair)
-        {
-            // TODO: Handle Chair button click action
-        }
-        else if (id == R.id.nav_table)
-        {
-            // TODO: Handle Table button click action
-        }
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -267,6 +232,157 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Update empty state with no connection error message
             TextView emptyStateText = findViewById(R.id.empty_view_text);
             emptyStateText.setText(R.string.text_loading_failed);
+        }
+    }
+
+    private void setDrawerNavigationAndToolbar()
+    {
+        // set the modified toolbar as the action bar
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+
+        // Creates a drawer (Hamburger menu) and and set toggle options
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Attaches an Item Selected listener with app drawer's navigation items
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        final Menu menu = navigationView.getMenu();
+        subMenu = menu.addSubMenu(R.string.category_title);
+    }
+
+    private void populateRecyclerView()
+    {
+        RecyclerView recyclerView = findViewById(R.id.rv_newly_added_main);
+
+        // The items of the recycler view will be shown in grids
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(layoutManager);
+
+        FirebaseRecyclerOptions<Product> options =
+                new FirebaseRecyclerOptions.Builder<Product>()
+                        .setQuery(PRODUCT_REF, Product.class)
+                        .setLifecycleOwner(this)
+                        .build();
+
+        mainRecyclerAdapter = new MainRecyclerAdapter(options);
+        // specify the adapter to populate the recyclerView
+        recyclerView.setAdapter(mainRecyclerAdapter);
+
+        // Attaches an item listener to the recycler view items
+        mainRecyclerAdapter.setOnItemClickListener((view, position) ->
+        {
+            Log.v(LOG_TAG, "The position of the selected item: " + position);
+
+            String key = mainRecyclerAdapter.getRef(position).getKey();
+            Log.v(LOG_TAG, "The key is: " + key);
+
+            // Open the product details activity and show details of the selected product
+            startActivity(ProductDetailsActivity.buildIntent(this, key));
+        });
+    }
+
+    private void setUpSearchBar()
+    {
+        TextInputEditText searchProduct = findViewById(R.id.search_product_main);
+
+        // Start the searchProductActivity whenever the searchProduct toolbar is clicked
+        searchProduct.setOnClickListener(view ->
+        {
+            Log.v(LOG_TAG, "Search Product Clicked");
+            //liveData.removeObservers(this);
+            startActivity(SearchProductActivity.buildIntent(this));
+        });
+    }
+
+    private void listenForAuthentication()
+    {
+        authStateListener = firebaseAuth ->
+        {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+
+            if (user == null)
+            {
+                startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setAvailableProviders(providers)
+                                .setLogo(R.mipmap.ashbab_icon)
+                                .setTheme(R.style.LoginTheme)
+                                .build(),
+                        RC_SIGN_IN);
+            }
+            else
+            {
+                updateNavHeader(user);
+            }
+        };
+    }
+
+    private void updateNavHeader(FirebaseUser user)
+    {
+        Log.d(LOG_TAG, "updateNavHeader Called");
+
+        for (UserInfo profile : user.getProviderData())
+        {
+            if (profile.getProviderId().equals("facebook.com")
+                    || profile.getProviderId().equals("google.com"))
+            {
+                Log.d(LOG_TAG, "ProviderID: " + profile.getProviderId());
+
+                //For linked facebook account
+                Log.d(LOG_TAG, "User is signed in with Facebook / Google");
+
+                // UID specific to the provider
+                String uid = profile.getUid();
+
+                // Name, email address, and profile photo Url
+                String name = profile.getDisplayName();
+                String email = profile.getEmail();
+                String photoUrl = Objects.requireNonNull(profile.getPhotoUrl()).toString();
+
+                ImageView userPhoto = findViewById(R.id.profile_image_nav);
+                TextView userName = findViewById(R.id.name_text_nav);
+                TextView userEmail = findViewById(R.id.email_text_nav);
+
+                if (userPhoto != null && userName != null && userEmail != null)
+                {
+
+                    Glide.with(userPhoto.getContext()).load(photoUrl).into(userPhoto);
+                    userName.setText(name);
+                    userEmail.setText(email);
+                }
+
+                User currentUser = new User(uid, name, email, photoUrl);
+
+                USER_REF.child(uid).setValue(currentUser);
+            }
+            else
+            {
+                // The user's ID, unique to the Firebase project. Do NOT use this value to
+                // authenticate with your backend server, if you have one. Use
+                // FirebaseUser.getIdToken() instead.
+                String uid = user.getUid();
+
+                // Name, email address, and profile photo Url
+                String name = user.getDisplayName();
+                String email = user.getEmail();
+                String photoUrl = null;
+
+                if (user.getPhotoUrl() != null)
+                    photoUrl = user.getPhotoUrl().toString();
+
+                User currentUser = new User(uid, name, email, photoUrl);
+
+                USER_REF.child(uid).setValue(currentUser);
+
+            }
         }
     }
 }

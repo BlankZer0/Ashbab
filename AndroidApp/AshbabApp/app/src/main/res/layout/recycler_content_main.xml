@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/card_main_image_height"
             android:scaleType="centerCrop"
-            tools:src="@mipmap/ic_launcher"
+            tools:src="@raw/profile_cover"
             tools:ignore="ContentDescription" />
 
         <TextView
