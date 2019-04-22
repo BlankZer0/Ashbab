@@ -18,7 +18,7 @@ import androidx.lifecycle.MediatorLiveData;
 
 /**
  * The single point of truth
- * All the data used for the is has be fetched from this repository class
+ * All the data used in the entire app has to be fetched from this repository class
  */
 public class AshbabRepository
 {
@@ -42,9 +42,9 @@ public class AshbabRepository
     private MediatorLiveData<User> userMediatorLiveData = new MediatorLiveData<>();
 
     /**
-     * Set up the MediatorLiveData to convert DataSnapshot objects into Product productLiveData
+     * Set up the MediatorLiveData to convert DataSnapshot objects into productLiveData
      */
-    private void InitializeProductData()
+    private void getPoductFromFirebase()
     {
         productMediatorLiveData.addSource(productLiveData, (DataSnapshot dataSnapshot) ->
         {
@@ -70,6 +70,9 @@ public class AshbabRepository
         });
     }
 
+    /**
+     * Set up the MediatorLiveData to convert DataSnapshot objects into categoryLiveData
+     */
     private void getCategoryFromFirebase()
     {
         categoryMediatorLiveData.addSource(categoryLiveData, (DataSnapshot dataSnapshot) ->
@@ -82,9 +85,9 @@ public class AshbabRepository
 
                 executorService.execute(() ->
                 {
-                    Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.getValue(String.class)) + " has been found");
+                    Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.child("CategoryName").getValue(String.class)) + " has been found");
                     // Post value is used because it's thread safe
-                    categoryMediatorLiveData.postValue(dataSnapshot.getValue(String.class));
+                    categoryMediatorLiveData.postValue(dataSnapshot.child("CategoryName").getValue(String.class));
                 });
             }
             else
@@ -97,9 +100,9 @@ public class AshbabRepository
     }
 
     /**
-     * Set up the MediatorLiveData to convert DataSnapshot objects into Product productLiveData
+     * Set up the MediatorLiveData to convert DataSnapshot objects into userLiveData
      */
-    private void InitializeUserData()
+    private void getUserFromFirebase()
     {
         userMediatorLiveData.addSource(userLiveData, (DataSnapshot dataSnapshot) ->
         {
@@ -111,7 +114,7 @@ public class AshbabRepository
 
                 executorService.execute(() ->
                 {
-                    Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.getValue(User.class)).getUserEmail() + " has been found");
+                    //Log.v(LOG_TAG, Objects.requireNonNull(dataSnapshot.getValue(User.class)).getUserEmail() + " has been found");
                     // Post value is used because it's thread safe
                     userMediatorLiveData.postValue(dataSnapshot.getValue(User.class));
                 });
@@ -132,21 +135,28 @@ public class AshbabRepository
     {
         productLiveData = new FirebaseQueryLiveData(PRODUCT_REF.orderByKey().equalTo(key));
 
-        InitializeProductData();
+        getPoductFromFirebase();
         return productMediatorLiveData;
     }
 
+    /**
+     * The Main viewModel will collect it's data by calling this method
+     */
     public LiveData<String> getLiveDataCategory()
     {
         getCategoryFromFirebase();
         return categoryMediatorLiveData;
     }
 
+    /**
+     * The User viewModel will collect it's data by calling this method
+     */
     public LiveData<User> getLiveDataUser(String key)
     {
+        Log.v(LOG_TAG, "The key is: " + key);
         userLiveData = new FirebaseQueryLiveData(USER_REF.orderByKey().equalTo(key));
 
-        InitializeUserData();
+        getUserFromFirebase();
         return userMediatorLiveData;
     }
 }

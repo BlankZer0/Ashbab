@@ -8,6 +8,8 @@ public class User
     private String userPhotoUrl;
     private String userAddress;
 
+    public User() {}
+
     public User(String uID, String userName, String userEmail, String userPhotoUrl)
     {
         this.userName = userName;
@@ -25,55 +27,25 @@ public class User
         this.userAddress = userAddress;
     }
 
-    public String getuID()
-    {
-        return uID;
-    }
+    public String getuID() { return uID; }
 
-    public void setuID(String uID)
-    {
-        this.uID = uID;
-    }
+    public String getUserName() { return userName; }
 
-    public String getUserName()
-    {
-        return userName;
-    }
+    public String getUserEmail() { return userEmail; }
 
-    public void setUserName(String userName)
-    {
-        this.userName = userName;
-    }
+    public String getUserPhotoUrl() { return userPhotoUrl; }
 
-    public String getUserEmail()
-    {
-        return userEmail;
-    }
+    public String getUserAddress() { return userAddress; }
 
-    public void setUserEmail(String userEmail)
-    {
-        this.userEmail = userEmail;
-    }
+    public void setuID(String uID) { this.uID = uID; }
 
-    public String getUserPhotoUrl()
-    {
-        return userPhotoUrl;
-    }
+    public void setUserName(String userName) { this.userName = userName; }
 
-    public void setUserPhotoUrl(String userPhotoUrl)
-    {
-        this.userPhotoUrl = userPhotoUrl;
-    }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 
-    public String getUserAddress()
-    {
-        return userAddress;
-    }
+    public void setUserPhotoUrl(String userPhotoUrl) { this.userPhotoUrl = userPhotoUrl; }
 
-    public void setUserAddress(String userAddress)
-    {
-        this.userAddress = userAddress;
-    }
+    public void setUserAddress(String userAddress) { this.userAddress = userAddress; }
 
     @Override
     public String toString()

@@ -13,19 +13,7 @@ public class Product
     private String category;
     private String description;
 
-    public Product()
-    {
-    }
-
-    /**
-     * This constructor is used for getting the data on the Home UI Cards
-     */
-    public Product(String productName, float productPrice, String imageUrl)
-    {
-        this.productName = productName;
-        this.productPrice = productPrice;
-        this.imageUrl = imageUrl;
-    }
+    public Product() {}
 
     /**
      * This constructor is used to get the data for the Product Details Activity
@@ -41,40 +29,19 @@ public class Product
         this.description = description;
     }
 
-    public String getProductID()
-    {
-        return productID;
-    }
+    public String getProductID() { return productID; }
 
-    public String getProductName()
-    {
-        return productName;
-    }
+    public String getProductName() { return productName; }
 
-    public float getProductPrice()
-    {
-        return productPrice;
-    }
+    public float getProductPrice() { return productPrice; }
 
-    public String getImageUrl()
-    {
-        return imageUrl;
-    }
+    public String getImageUrl() { return imageUrl; }
 
-    public String getModel3dUrl()
-    {
-        return model3dUrl;
-    }
+    public String getModel3dUrl() { return model3dUrl; }
 
-    public String getCategory()
-    {
-        return category;
-    }
+    public String getCategory() { return category; }
 
-    public String getDescription()
-    {
-        return description;
-    }
+    public String getDescription() { return description; }
 
     @Override
     public String toString()

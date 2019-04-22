@@ -24,7 +24,7 @@
     <string name="category_chair">Chair</string>
     <string name="category_table">Table</string>
 
-    <!-- Home appbar_items_main content -->
+    <!-- Home content -->
     <string name="title_newly_added">Newly Added</string>
     <string name="text_loading_failed">Failed to load Data\nCheck your internet connection</string>
     <string name="text_signed_in">Signed in Successfully</string>
@@ -35,6 +35,9 @@
     <string name="title_description">Product Description</string>
     <string name="title_category">Category: </string>
     <string name="fab_buy">Buy Product</string>
+    <string name="order_placed">Order Placed Successfully</string>
+    <string name="text_address_missing">We do not know where you live!\n
+                                        Please go to your profile page to add your address</string>
 
     <!-- User Profile Content -->
     <string name="fab_save">Save</string>
@@ -46,6 +49,10 @@
 
     <!-- Search Results Content -->
     <string name="title_search_results"> Search Results </string>
+
+    <!-- User Profile Content -->
+    <string name="text_profile_saved">Profile Updated Successfully</string>
+    <string name="text_profile_save_failed">Profile Update Failed</string>
 
     <!-- Default Values -->
     <string name="default_home_card_name">Sample Chair</string>

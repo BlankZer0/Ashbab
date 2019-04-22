@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/profile_image_nav"
-        android:layout_width="@dimen/profile_pic_length"
-        android:layout_height="@dimen/profile_pic_length"
+        android:layout_width="@dimen/propic_length_nav"
+        android:layout_height="@dimen/propic_length_nav"
         android:contentDescription="@string/nav_header_desc"
         app:srcCompat="@mipmap/ashbab_icon" />
 
