@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Edit a product</title>
+    <meta charset="utf-8">
+    <title>Ashbab Admin Panel</title>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -18,7 +17,37 @@
             <h1 class="brand">Admin Panel</h1>
         </h1>
     </div>
-    
+    <div class="container">
+        <div class="wrapper">
+            <div class="company-info">
+                <h3>Category Management</h3>
+            </div>
+            <div class="contact" id="contactForm">
+                <h3>All Categories</h3>
+
+                <form>
+                    <nav>
+                        <ul id="categoryList">
+                            <li>No items loaded</li>
+                        </ul>
+                    </nav>
+                    <p>
+                        <label>New Category</label>
+                        <input type="text" name="newCategory" id="newCategory">
+                    </p>
+                    
+                    <p class="full">
+                        <button>Submit</button>
+                    </p>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="manageCategories.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+
 </body>
 
 </html>
