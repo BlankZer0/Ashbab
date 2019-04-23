@@ -9,7 +9,6 @@ import android.os.Bundle;
 import com.ashbab.ashbabapp.R;
 import com.ashbab.ashbabapp.data.model.Product;
 
-import com.ashbab.ashbabapp.data.model.User;
 import com.ashbab.ashbabapp.ui.productDetails.ProductDetailsActivity;
 import com.ashbab.ashbabapp.ui.searchProduct.SearchProductActivity;
 import com.ashbab.ashbabapp.ui.userProfile.UserProfileActivity;
@@ -47,7 +46,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -359,15 +360,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     userEmail.setText(email);
                 }
 
-                User currentUser = new User(uid, name, email, photoUrl);
+                Map<String,Object> updates = new HashMap<String,Object>();
+                updates.put("uID", uid);
+                updates.put("userName", name);
+                updates.put("userEmail", email);
+                updates.put("userPhotoUrl", photoUrl);
 
-                USER_REF.child(uid).setValue(currentUser);
+                USER_REF.child(uid).updateChildren(updates);
             }
             else
             {
-                // The user's ID, unique to the Firebase project. Do NOT use this value to
-                // authenticate with your backend server, if you have one. Use
-                // FirebaseUser.getIdToken() instead.
+                // The user's ID, unique to the Firebase project.
                 String uid = user.getUid();
 
                 // Name, email address, and profile photo Url
@@ -378,10 +381,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (user.getPhotoUrl() != null)
                     photoUrl = user.getPhotoUrl().toString();
 
-                User currentUser = new User(uid, name, email, photoUrl);
+                Map<String,Object> updates = new HashMap<String,Object>();
+                updates.put("uID", uid);
+                updates.put("userName", name);
+                updates.put("userEmail", email);
+                updates.put("userPhotoUrl", photoUrl);
 
-                USER_REF.child(uid).setValue(currentUser);
-
+                USER_REF.child(uid).updateChildren(updates);
             }
         }
     }

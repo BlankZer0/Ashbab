@@ -29,6 +29,7 @@
     <dimen name="ar_icon_size">60dp</dimen>
 
     <!-- USer Profile Picture -->
-    <dimen name="profile_pic_length">72dp</dimen>
+    <dimen name="propic_length_nav">72dp</dimen>
+    <dimen name="propic_length_user">192dp</dimen>
 
 </resources>

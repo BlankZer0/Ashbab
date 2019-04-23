@@ -33,7 +33,6 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <ImageView
-                android:id="@+id/product_image_view_user"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/product_image_height"
                 android:minHeight="@dimen/product_image_height"
@@ -46,6 +45,15 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_user_profile" />
+
+    <ImageView
+        android:id="@+id/profile_pic_user"
+        android:layout_width="@dimen/propic_length_user"
+        android:layout_height="@dimen/propic_length_user"
+        android:src="@mipmap/ashbab_icon"
+        app:layout_anchor="@id/app_bar_user"
+        app:layout_anchorGravity="center"
+        tools:ignore="ContentDescription" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"

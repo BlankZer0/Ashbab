@@ -1,16 +1,17 @@
 package com.ashbab.ashbabapp.ui.productDetails;
 
-import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public class ProductDetailsViewModelFactory implements ViewModelProvider.Factory
+/**
+ * Implementations of this Factory interface are responsible to instantiate ProductDetailsViewModel.
+ */
+class ProductDetailsViewModelFactory implements ViewModelProvider.Factory
 {
     private String extra;
 
-    public ProductDetailsViewModelFactory(String extra)
+    ProductDetailsViewModelFactory(String extra)
     {
         this.extra = extra;
     }

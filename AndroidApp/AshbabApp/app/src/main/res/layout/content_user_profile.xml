@@ -28,7 +28,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             style="@style/TextAppearance.AppText.Body1"
-            android:id="@+id/user_name_input"
+            android:id="@+id/input_name_user"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -63,7 +63,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             style="@style/TextAppearance.AppText.Body1"
-            android:id="@+id/user_address_input"
+            android:id="@+id/input_address_user"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -98,7 +98,7 @@
 
         <TextView
             style="@style/TextAppearance.AppText.Body1"
-            android:id="@+id/user_email_text"
+            android:id="@+id/text_email_user"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

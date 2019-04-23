@@ -6,84 +6,68 @@
     <title>Ashbab Admin Panel</title>
     <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/styleTable.css">
 </head>
 
 
 <body>
+    <div class="container">
+        <h1 class="brand" href="index.html">
+            <span><img class="logo" src="images/AshbabLogo.png" alt="logo" onclick="window.location.href='index.html'">
+                ASHBAB
+            </span>
+            <h1 class="brand">Admin Panel</h1>
+        </h1>
+    </div>
+
+    <div class="container">
+        <div class="wrapper">
+            <div class="company-info">
+                <h3>Manage Order</h3>
+            </div>
+
+            <div class="contact" id="contactForm">
+                <h3>Product Info</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>date</th>
+                            <th>order ID</th>
+                            <th>Id</th>
+                            <th>name</th>
+                            <th class="text-right">price</th>
+                            <th class="text-right">quantity</th>
+                            <th class="text-right">total</th>
+                            <th class="text-right">Accept/Reject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td>
+                                <button class="button"
+                                    onclick="window.location.href='customerDetails.html'">Accept</button>
+                                <button class="button" onclick="alart()">Reject</button>
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
 
 
-
-        <button class="button" onclick="window.location.href='index.html'">Main Page</button>
-
-        <div class="container">
-
-            <h1 class="brand" onclick="window.location.href='index.html'">
-                <span><img class="logo" src="images/AshbabLogo.png" alt="logo">ASHBAB</span>
-                <br>Admin Panel</h1>
-        </div>
-
-        <div class="container">
-           
-            <div class="wrapper">
-                <div class="company-info">
-                    <h3>MANAGE ORDER</h3>
-                </div>
-    
-                <div class="contact" id="contactForm">
-                    <h3>PRODUCT INFORMATION</h3>
-                    <form>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>date</th>
-                                <th>order ID</th>
-                                <th>Product Id</th>
-                                <th>name</th>
-                                <th class="text-right">price</th>
-                                <th class="text-right">quantity</th>
-                                <th class="text-right">total</th>
-                                <th class="text-right">Accept/Reject</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
-                                <td> 
-                                    
-                                   
-                                    <a class="button" href="customerDetails.html">Edit</a>
-                                    <a class="button" >Remove</a>
-                                    
-                                </td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                
-    
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
-    
-    
-        <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
-        <script src="addProduct.js"></script>
-        <script src="validators.js"></script>
-    </body>
-    
-    </html>
-
-   
+    </div>
 
 
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+</body>
 
-
-
+</html>
